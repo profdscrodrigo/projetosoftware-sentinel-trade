@@ -53,7 +53,6 @@ O **SentinelTrade** é a plataforma proposta para resolver esse problema. Como d
 | Markdown | Escrita da documentação (requisitos e casos de uso). |
 | UML | Modelagem do sistema (diagrama de casos de uso). |
 | Git e GitHub | Versionamento e hospedagem do repositório privado. |
-| Visual Studio Code | Edição dos documentos. |
 
 Esta etapa do projeto é de **especificação e modelagem**, por isso não há linguagem de programação, banco de dados ou framework definidos.
 
@@ -68,7 +67,7 @@ O repositório não contém código executável: ele é composto por documentaç
    git clone https://github.com/bpaulino5/Projeto-De-Software-Sistema-SentinelTrade.git
    cd Projeto-De-Software-Sistema-SentinelTrade
    ```
-2. Abra a pasta no Visual Studio Code:
+2. Abra a pasta no Codespace:
    ```bash
    code .
    ```
