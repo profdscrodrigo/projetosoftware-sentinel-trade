@@ -1,6 +1,6 @@
 # SentinelTrade
 
-**Sistema de Trade Financeiro de Alta Criticidade** — Exercício Integrador da disciplina de Projeto de Software.
+**Sistema de Trade Financeiro de Alta Criticidade** — Projeto da disciplina Projeto de Software.
 
 Este repositório reúne a **especificação** e a **modelagem** do SentinelTrade: requisitos, casos de uso e diagramas UML.
 
@@ -12,7 +12,7 @@ A corretora fictícia **Orion Capital** opera uma plataforma digital de negocia�
 
 O **SentinelTrade** é a plataforma proposta para resolver esse problema. Como decisões erradas, atrasadas ou não auditáveis geram impacto financeiro, regulatório e reputacional, o sistema é projetado como uma plataforma **distribuída, segura, escalável e tolerante a falhas**.
 
-> O projeto não se integra a uma bolsa real nem usa dinheiro real. Ativos, contas e cotações são **simulados**.
+---
 
 ### O que o sistema deve fazer
 
@@ -25,6 +25,8 @@ O **SentinelTrade** é a plataforma proposta para resolver esse problema. Como d
 - registrar logs de auditoria imutáveis;
 - notificar o investidor sobre execução, rejeição, cancelamento ou falha;
 - operar com mecanismos de recuperação, indisponibilidade controlada e prevenção de duplicidade de ordens.
+
+---
 
 ### Atores
 
@@ -53,27 +55,7 @@ O **SentinelTrade** é a plataforma proposta para resolver esse problema. Como d
 | Markdown | Escrita da documentação (requisitos e casos de uso). |
 | UML | Modelagem do sistema (diagrama de casos de uso). |
 | Git e GitHub | Versionamento e hospedagem do repositório privado. |
-
-Esta etapa do projeto é de **especificação e modelagem**, por isso não há linguagem de programação, banco de dados ou framework definidos.
-
----
-
-## Instruções de execução
-
-O repositório não contém código executável: ele é composto por documentação. Para consultá-la:
-
-1. Clone o repositório (é necessário ter acesso à conta com permissão no repositório privado):
-   ```bash
-   git clone https://github.com/bpaulino5/Projeto-De-Software-Sistema-SentinelTrade.git
-   cd Projeto-De-Software-Sistema-SentinelTrade
-   ```
-2. Abra a pasta no Codespace:
-   ```bash
-   code .
-   ```
-3. Abra qualquer arquivo `.md` e use `Ctrl+Shift+V` para ver a versão formatada.
-
-**Ordem de leitura sugerida:** requisitos funcionais → requisitos não funcionais → especificação dos casos de uso → diagrama de casos de uso.
+| draw.io | Desenvolvimento do diagrama
 
 ---
 
@@ -106,9 +88,3 @@ O repositório não contém código executável: ele é composto por documentaç
 | [Diagrama de casos de uso](docs/uml/diagrama-casos-de-uso.png) | Visão gráfica dos casos de uso e dos atores. |
 
 ![Diagrama de casos de uso do SentinelTrade](docs/uml/diagrama-casos-de-uso.png)
-
----
-
-## Segurança do repositório
-
-Este repositório **não deve conter** senhas, tokens, chaves de API ou dados sensíveis. Valores de configuração ficam em um arquivo `.env` local, que é ignorado pelo Git (ver `.gitignore`). O arquivo `.env.example` mostra apenas o formato, sem valores reais.
