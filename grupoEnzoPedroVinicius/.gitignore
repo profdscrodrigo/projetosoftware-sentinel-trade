@@ -1,0 +1,39 @@
+# Segredos e configuração local (NUNCA versionar)
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.jks
+secrets/
+credentials*.json
+
+# Dependências e builds
+node_modules/
+venv/
+.venv/
+__pycache__/
+*.pyc
+target/
+build/
+dist/
+out/
+*.class
+*.jar
+*.log
+logs/
+
+# IDEs e sistema operacional
+.idea/
+.vscode/
+*.iml
+.DS_Store
+Thumbs.db
+
+# Bancos locais e dados gerados
+*.db
+*.sqlite
+*.sqlite3
+data/local/
+coverage/
