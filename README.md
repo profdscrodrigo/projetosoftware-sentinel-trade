@@ -2,8 +2,6 @@
 
 **Sistema de Trade Financeiro de Alta Criticidade** — Projeto da disciplina Projeto de Software.
 
-> **Aviso:** o SentinelTrade opera exclusivamente com dados e operações **simuladas**.
-
 Este repositório reúne a **especificação** e a **modelagem** do SentinelTrade: requisitos, casos de uso e diagramas UML.
 
 ---
