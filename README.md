@@ -2,6 +2,8 @@
 
 **Sistema de Trade Financeiro de Alta Criticidade** — Projeto da disciplina Projeto de Software.
 
+> **Aviso:** o SentinelTrade opera exclusivamente com dados e operações **simuladas**.
+
 Este repositório reúne a **especificação** e a **modelagem** do SentinelTrade: requisitos, casos de uso e diagramas UML.
 
 ---
@@ -33,8 +35,12 @@ O **SentinelTrade** é a plataforma proposta para resolver esse problema. Como d
 | Ator | Descrição |
 |---|---|
 | Investidor | Usuário autorizado que consulta informações e realiza operações. |
+| Administrador | Gerencia ativos e parâmetros operacionais. |
+| Analista de Risco | Ajusta limites de risco e acompanha ordens bloqueadas ou rejeitadas. |
 | Provedor de Cotações | Sistema externo que fornece cotações simuladas ao SentinelTrade. |
 | Bolsa/Corretora Simulada | Sistema externo que recebe ordens válidas e retorna eventos de processamento. |
+| Serviço de Notificação | Informa o investidor sobre eventos relevantes. |
+| Serviço de Auditoria | Registra ações, decisões e alterações de estado. |
 
 ---
 
@@ -55,7 +61,19 @@ O **SentinelTrade** é a plataforma proposta para resolver esse problema. Como d
 | Markdown | Escrita da documentação (requisitos e casos de uso). |
 | UML | Modelagem do sistema (diagrama de casos de uso). |
 | Git e GitHub | Versionamento e hospedagem do repositório privado. |
-| draw.io | Desenvolvimento do diagrama
+| draw.io | Desenvolvimento do diagrama. |
+| Python | Linguagem escolhida para a fase de implementação. |
+| PostgreSQL | Banco de dados relacional escolhido. |
+
+---
+
+## Instruções de execução
+
+> Esta seção será preenchida na Fase 2, quando o código for implementado.
+
+1. Copie `.env.example` para `.env` e preencha localmente (o `.env` nunca deve ser commitado).
+2. Crie o banco PostgreSQL e execute `database/schema.sql` e `database/seed.sql`.
+3. Instale as dependências do projeto e execute os testes.
 
 ---
 
@@ -66,14 +84,24 @@ O **SentinelTrade** é a plataforma proposta para resolver esse problema. Como d
 ├── README.md
 ├── .gitignore
 ├── .env.example
-└── docs/
-    ├── casos-de-uso/
-    │   └── especificacao-casos-de-uso.md
-    ├── requisitos/
-    │   ├── requisitos-funcionais.md
-    │   └── requisitos-nao-funcionais.md
-    └── uml/
-        └── diagrama-casos-de-uso.png
+├── docs/
+│   ├── requisitos/
+│   │   ├── requisitos.md
+│   │   ├── requisitos-funcionais.md
+│   │   ├── requisitos-nao-funcionais.md
+│   │   ├── regras-de-negocio.md
+│   │   └── matriz-rastreabilidade.md
+│   ├── casos-de-uso/
+│   │   └── especificacao-casos-de-uso.md
+│   ├── uml/
+│   │   └── diagrama-casos-de-uso.png
+│   └── evidencias/
+├── database/
+│   ├── schema.sql
+│   └── seed.sql
+├── diagrams/
+├── src/
+└── tests/
 ```
 
 ---
@@ -82,9 +110,12 @@ O **SentinelTrade** é a plataforma proposta para resolver esse problema. Como d
 
 | Documento | Conteúdo |
 |---|---|
-| [Requisitos funcionais](docs/requisitos/requisitos-funcionais.md) | 17 requisitos (RF-01 a RF-17). |
+| [Requisitos](docs/requisitos/requisitos.md) | Visão do sistema e atores. |
+| [Requisitos funcionais](docs/requisitos/requisitos-funcionais.md) | 17 requisitos (RF-01 a RF-17), com critérios de aceitação. |
 | [Requisitos não funcionais](docs/requisitos/requisitos-nao-funcionais.md) | 11 requisitos (RNF-01 a RNF-11). |
-| [Especificação dos casos de uso](docs/casos-de-uso/especificacao-casos-de-uso.md) | Atores e 9 casos de uso (UC-01 a UC-09), com fluxos principais e alternativos. |
+| [Regras de negócio](docs/requisitos/regras-de-negocio.md) | Regras que devem ser aplicadas durante as operações (RN-01 a RN-08). |
+| [Matriz de rastreabilidade](docs/requisitos/matriz-rastreabilidade.md) | Ligação entre requisitos, casos de uso e diagramas. |
+| [Especificação dos casos de uso](docs/casos-de-uso/especificacao-casos-de-uso.md) | Atores e casos de uso (UC-01 a UC-10), com fluxos principais e alternativos. |
 | [Diagrama de casos de uso](docs/uml/diagrama-casos-de-uso.png) | Visão gráfica dos casos de uso e dos atores. |
 
 ![Diagrama de casos de uso do SentinelTrade](docs/uml/diagrama-casos-de-uso.png)
