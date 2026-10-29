@@ -1,1 +1,3 @@
-
+-- SentinelTrade - Dados iniciais simulados (PostgreSQL)
+-- Será preenchido na Fase 2 com ativos e usuários de teste fictícios.
+-- Não inserir dados pessoais reais.
