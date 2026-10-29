@@ -1,0 +1,74 @@
+@startuml
+title SentinelTrade - Diagrama de Casos de Uso
+left to right direction
+skinparam packageStyle rectangle
+
+actor "Investidor" as INV
+actor "Administrador" as ADM
+actor "Analista de Risco" as AR
+actor "Bolsa/Corretora Simulada" as BOLSA
+actor "Provedor de Cotações" as PROV
+actor "Serviço de Notificação" as NOT
+actor "Serviço de Auditoria" as AUD
+
+rectangle SentinelTrade {
+  usecase "Autenticar com MFA" as UC01
+  usecase "Consultar cotações" as UC02
+  usecase "Consultar saldo" as UC03
+  usecase "Consultar carteira" as UC04
+  usecase "Enviar ordem de compra" as UC05
+  usecase "Enviar ordem de venda" as UC06
+  usecase "Cancelar ordem" as UC07
+  usecase "Consultar e acompanhar ordem" as UC08
+  usecase "Consultar histórico" as UC09
+  usecase "Validar ordem" as UC10
+  usecase "Transmitir ordem à Bolsa/Corretora" as UC11
+  usecase "Gerenciar ativos" as UC12
+  usecase "Gerenciar limites de risco" as UC13
+  usecase "Registrar auditoria" as UC14
+  usecase "Enviar notificação" as UC15
+  usecase "Receber cotações do provedor" as UC16
+  usecase "Verificar saldo ou posição" as V1
+  usecase "Verificar limite de risco" as V2
+  usecase "Verificar situação do mercado" as V3
+  usecase "Verificar duplicidade" as V4
+  usecase "Confirmar operação acima do limite" as EXT
+}
+
+INV --> UC01
+INV --> UC02
+INV --> UC03
+INV --> UC04
+INV --> UC05
+INV --> UC06
+INV --> UC07
+INV --> UC08
+INV --> UC09
+ADM --> UC12
+AR --> UC13
+
+UC05 ..> UC10 : <<include>>
+UC06 ..> UC10 : <<include>>
+UC10 ..> V1 : <<include>>
+UC10 ..> V2 : <<include>>
+UC10 ..> V3 : <<include>>
+UC10 ..> V4 : <<include>>
+UC05 ..> UC11 : <<include>>
+UC06 ..> UC11 : <<include>>
+UC05 ..> UC14 : <<include>>
+UC06 ..> UC14 : <<include>>
+UC07 ..> UC14 : <<include>>
+UC12 ..> UC14 : <<include>>
+UC13 ..> UC14 : <<include>>
+UC05 ..> UC15 : <<include>>
+UC06 ..> UC15 : <<include>>
+UC07 ..> UC15 : <<include>>
+EXT ..> UC05 : <<extend>>
+
+UC02 ..> UC16 : usa
+PROV --> UC16
+UC11 --> BOLSA
+UC07 --> BOLSA
+NOT --> UC15
+AUD --> UC14
+@enduml
