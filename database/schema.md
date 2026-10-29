@@ -1,0 +1,3 @@
+-- SentinelTrade - Esquema do banco de dados (PostgreSQL)
+-- Estrutura inicial de contas, carteiras, ativos, ordens e auditoria.
+-- Será detalhada na Fase 2 (commit: db: adiciona estrutura inicial de contas e ordens).
