@@ -1,0 +1,15 @@
+# segredos
+.env
+
+# arquivos gerados pelo Python
+__pycache__/
+*.pyc
+.venv/
+
+# editores
+.vscode/
+.idea/
+.DS_Store
+
+# logs do sistema
+logs/
