@@ -13,3 +13,23 @@ As regras abaixo devem ser aplicadas durante as operações do SentinelTrade.
 | RN-07 | A indisponibilidade da Bolsa/Corretora simulada não pode apagar a ordem nem alterar indevidamente a carteira. | RF-12, RNF-03, RNF-05 | UC-05, UC-06, UC-10 |
 | RN-08 | O investidor somente pode consultar as próprias informações. | RF-02, RF-03, RF-14, RNF-01 | UC-03, UC-04, UC-07, UC-08, UC-09 |
 | RN-09 | Ordem executada não pode ser cancelada. | RF-09 | UC-06 |
+
+### Acrescentadas na implementação
+
+| ID | Regra | Casos de uso |
+|---|---|---|
+| RN-10 | A ordem não pode passar do limite por ordem do investidor. | UC-05, UC-10 |
+| RN-11 | Com o mercado fechado ou o ativo suspenso, a ordem é rejeitada. | UC-05, UC-10 |
+| RN-12 | Ordem acima de R$ 10.000 precisa de confirmação. | UC-05, UC-10 |
+| RN-13 | 5 senhas erradas seguidas bloqueiam o usuário. | UC-01 |
+
+## Estados da ordem
+
+| Estado | Quando acontece | Pode ir para |
+|---|---|---|
+| CRIADA | A ordem foi registrada | VALIDADA, REJEITADA |
+| VALIDADA | Passou nas verificações | ENVIADA, CANCELADA |
+| ENVIADA | Foi mandada para a bolsa | EXECUTADA, PARCIALMENTE_EXECUTADA, REJEITADA, FALHA |
+| PARCIALMENTE_EXECUTADA | A bolsa executou só uma parte (previsto; a bolsa simulada executa tudo de uma vez) | EXECUTADA, CANCELADA |
+| FALHA | A bolsa não respondeu; a ordem fica guardada | ENVIADA (reenvio), CANCELADA |
+| EXECUTADA, REJEITADA, CANCELADA | Estados finais | — |
