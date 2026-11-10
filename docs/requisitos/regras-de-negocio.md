@@ -34,6 +34,8 @@ As regras abaixo devem ser aplicadas durante as operações do SentinelTrade.
 | FALHA | A bolsa não respondeu; a ordem fica guardada | ENVIADA (reenvio), CANCELADA |
 | EXECUTADA, REJEITADA, CANCELADA | Estados finais | — |
 
+Decisão da equipe: FALHA não é estado final. A ordem espera a bolsa voltar para ser reenviada ou cancelada (assim cumprimos a RN-07).
+
 ## Onde cada regra está no código
 
 | Regra | Onde |
