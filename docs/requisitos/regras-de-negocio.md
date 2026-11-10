@@ -33,3 +33,18 @@ As regras abaixo devem ser aplicadas durante as operações do SentinelTrade.
 | PARCIALMENTE_EXECUTADA | A bolsa executou só uma parte (previsto; a bolsa simulada executa tudo de uma vez) | EXECUTADA, CANCELADA |
 | FALHA | A bolsa não respondeu; a ordem fica guardada | ENVIADA (reenvio), CANCELADA |
 | EXECUTADA, REJEITADA, CANCELADA | Estados finais | — |
+
+## Onde cada regra está no código
+
+| Regra | Onde |
+|---|---|
+| RN-01, RN-02 | `OrdemCompra.verificar` e `OrdemVenda.verificar` em `dominio.py` |
+| RN-03 | coluna `chave_idempotencia UNIQUE` + `ServicoOrdens.enviar` |
+| RN-04, RN-09 | `TRANSICOES` em `dominio.py` |
+| RN-05 | `ServicoOrdens._mudar` (toda mudança de status grava histórico e auditoria) |
+| RN-06 | `exigir()` em `servicos.py` |
+| RN-07 | `ServicoOrdens._transmitir` (status FALHA) |
+| RN-08 | `ServicoOrdens._ordem_do_usuario` |
+| RN-10, RN-11 | `ServicoOrdens._validar` |
+| RN-12 | `ServicoOrdens.enviar` (`PrecisaConfirmar`) |
+| RN-13 | `Autenticacao.entrar` |
