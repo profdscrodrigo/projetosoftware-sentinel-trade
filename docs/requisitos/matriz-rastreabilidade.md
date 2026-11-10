@@ -1,6 +1,6 @@
 # Matriz de Rastreabilidade
 
-| Requisito | Caso de uso associado | Diagrama futuro | Controle técnico |
+| Requisito | Caso de uso associado | Diagramas relacionados | Controle técnico |
 |---|---|---|---|
 | RF-08 — Envio de Ordem | UC-05 Enviar Ordem de Compra; UC-10 Enviar Ordem de Venda | Atividade, sequência e estados | Validação de saldo, posição, limite e idempotência |
 | RF-09 — Cancelamento de Ordem | UC-06 Cancelar Ordem | Atividade, sequência e estados | Verificação do estado antes do cancelamento |
