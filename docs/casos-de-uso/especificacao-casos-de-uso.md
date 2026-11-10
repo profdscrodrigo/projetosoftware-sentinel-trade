@@ -27,7 +27,7 @@ Sistema de apoio que registra ações, decisões e alterações de estado.
 
 ## UC-01 — Autenticar Usuário
 
-**Ator:** Investidor
+**Ator:** Investidor (também Administrador e Analista de Risco)
 
 **Objetivo:** Permitir acesso ao SentinelTrade por um usuário autorizado.
 
@@ -40,7 +40,7 @@ Sistema de apoio que registra ações, decisões e alterações de estado.
 4. O sistema valida as informações.
 5. O sistema libera o acesso.
 
-**Fluxo alternativo:** Se a autenticação falhar, o acesso não é liberado e o evento é registrado para auditoria.
+**Fluxo alternativo:** Se a autenticação falhar, o acesso não é liberado e o evento é registrado para auditoria. Depois de 5 senhas erradas o usuário é bloqueado (RN-13).
 
 **Requisitos relacionados:** RF-01, RNF-01.
 
@@ -122,9 +122,9 @@ Sistema de apoio que registra ações, decisões e alterações de estado.
 - Ordem duplicada → processamento duplicado impedido.
 - Falha na Bolsa/Corretora Simulada → falha registrada, carteira não alterada e investidor notificado.
 
-**Pós-condições:** A ordem está registrada com estado final (Executada, Rejeitada ou Falha). Saldo e carteira são alterados somente se a ordem for executada. Os eventos estão na auditoria e o investidor foi notificado.
+**Pós-condições:** A ordem está registrada com estado Executada, Rejeitada ou Falha (Falha pode ser reenviada depois). Saldo e carteira são alterados somente se a ordem for executada. Os eventos estão na auditoria e o investidor foi notificado.
 
-**Regras de negócio:** RN-01, RN-03, RN-04, RN-05, RN-07.
+**Regras de negócio:** RN-01, RN-03, RN-04, RN-05, RN-07, RN-10, RN-11, RN-12.
 
 **Requisitos relacionados:** RF-08, RF-11, RF-12, RF-15, RF-16, RF-17, RNF-07, RNF-10.
 
@@ -139,20 +139,21 @@ Sistema de apoio que registra ações, decisões e alterações de estado.
 **Pré-condições:**
 - Investidor autenticado.
 - A ordem pertence ao investidor.
-- A ordem está em estado Criada, Validada, Enviada ou Parcialmente Executada.
+- A ordem está em estado Validada, Parcialmente Executada ou Falha.
+
+> Na nossa simulação a bolsa responde na hora, então na prática a ordem que pode ser cancelada é a que ficou em **Falha** (bolsa fora do ar).
 
 **Fluxo principal:**
 1. O investidor seleciona uma ordem.
 2. Solicita o cancelamento.
 3. O sistema verifica o estado da ordem.
-4. Se o cancelamento for possível, o sistema envia a solicitação à Bolsa/Corretora Simulada.
-5. O estado da ordem é atualizado para Cancelada.
+4. Se o cancelamento for possível, o estado da ordem é atualizado para Cancelada.
+5. A carteira não muda, porque a ordem não chegou a ser executada.
 6. O evento é registrado para auditoria.
 7. O investidor é notificado.
 
 **Fluxos alternativos:**
 - Ordem executada → cancelamento recusado, com mensagem explicativa.
-- Bolsa/Corretora indisponível → cancelamento pendente, ordem não apagada, investidor notificado.
 - Ordem de outro investidor → acesso negado e tentativa registrada na auditoria.
 
 **Pós-condições:** Ordem cancelada e registrada na auditoria, ou estado inalterado com motivo registrado.
@@ -225,8 +226,26 @@ Sistema de apoio que registra ações, decisões e alterações de estado.
 - Ordem duplicada → processamento duplicado impedido.
 - Falha na Bolsa/Corretora Simulada → falha registrada, posição não alterada e investidor notificado.
 
-**Pós-condições:** A ordem está registrada com estado final (Executada, Rejeitada ou Falha). A posição é alterada somente se a ordem for executada. Os eventos estão na auditoria e o investidor foi notificado.
+**Pós-condições:** A ordem está registrada com estado Executada, Rejeitada ou Falha (Falha pode ser reenviada depois). A posição é alterada somente se a ordem for executada. Os eventos estão na auditoria e o investidor foi notificado.
 
-**Regras de negócio:** RN-02, RN-03, RN-04, RN-05, RN-07.
+**Regras de negócio:** RN-02, RN-03, RN-04, RN-05, RN-07, RN-10, RN-11, RN-12.
 
 **Requisitos relacionados:** RF-08, RF-11, RF-12, RF-15, RF-16, RF-17, RNF-07, RNF-10.
+
+---
+
+## Outros casos de uso do diagrama
+
+| UC | Nome | Ator | Resumo |
+|---|---|---|---|
+| UC-11 | Validar Ordem | Sistema | Verifica saldo ou posição, limite de risco, situação do mercado e duplicidade. Incluído em UC-05, UC-10 e UC-18. |
+| UC-12 | Transmitir Ordem à Bolsa/Corretora | Sistema | Envia a ordem; tenta 3 vezes; se falhar, a ordem fica em Falha. |
+| UC-13 | Gerenciar Ativos | Administrador | Cadastra, suspende e libera ativos. |
+| UC-14 | Gerenciar Limites de Risco | Analista de Risco | Altera o limite por ordem de um investidor. |
+| UC-15 | Registrar Auditoria | Serviço de Auditoria | Grava as ações importantes; não pode ser alterada nem apagada. |
+| UC-16 | Enviar Notificação | Serviço de Notificação | Avisa o investidor sobre execução, rejeição, cancelamento ou falha. |
+| UC-17 | Receber Cotações do Provedor | Provedor de Cotações | Atualiza o preço dos ativos; se falhar, fica o último preço. |
+| UC-18 | Alterar Ordem | Investidor | Muda quantidade e preço de uma ordem em Falha (valida de novo). |
+| UC-19 | Gerenciar Contas de Investidores | Administrador | Cadastra investidores e desbloqueia usuários. |
+| UC-20 | Acompanhar Ordens Bloqueadas/Rejeitadas | Analista de Risco | Lista as ordens rejeitadas e em falha. |
+| — | Confirmar Operação Acima do Limite (`<<extend>>`) | Investidor | Pedida em UC-05/UC-10 quando a ordem passa de R$ 10.000. |
