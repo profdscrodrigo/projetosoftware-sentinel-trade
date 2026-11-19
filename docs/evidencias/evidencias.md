@@ -40,7 +40,7 @@ git shortlog -sn HEAD
 
 ![Diagrama de casos de uso](../uml/diagrama-casos-de-uso.png)
 
-## Testes automáticos — 44 testes, todos OK (com PostgreSQL)
+## Testes automatizados — 51 testes aprovados (PostgreSQL)
 
 Comando: `python -m unittest discover -s tests -t . -v`
 
@@ -91,6 +91,28 @@ test_login_com_mfa (tests.test_sistema.TestSeguranca.test_login_com_mfa) ... ok
 test_token_alterado_ou_expirado (tests.test_sistema.TestSeguranca.test_token_alterado_ou_expirado) ... ok
 Ran 51 tests in 9.494s
 OK
+
+### Validação atualizada — 19/11/2026
+
+Os testes automatizados foram executados novamente no ambiente GitHub Codespaces, utilizando Python 3.14.2, pytest 9.2.0 e PostgreSQL 16.15.
+
+**Comando executado:**
+
+```bash
+python -m pytest -v
+```
+
+**Resultado obtido:**
+
+```text
+51 passed in 9.85s
+```
+
+Todos os 51 testes foram aprovados, sem falhas ou testes ignorados.
+
+A execução contemplou testes de domínio, operações financeiras, autenticação, autorização, regras de risco, auditoria e endpoints da API.
+
+Os testes de integração utilizaram o banco PostgreSQL de testes, configurado separadamente do banco principal da aplicação.
 ```
 
 ## bandit (análise de segurança do código)
@@ -137,3 +159,9 @@ No known vulnerabilities found
 ## Prints
 
 Salvar em `docs/evidencias/` os prints da estrutura do repositório, da aba de commits, dos commits de cada integrante, dos testes passando e da página `/docs` da API.
+
+### Testes automatizados
+
+A execução dos testes automatizados com PostgreSQL confirmou a aprovação dos 51 testes.
+
+![51 testes automatizados aprovados](testes-51-aprovados.png)
