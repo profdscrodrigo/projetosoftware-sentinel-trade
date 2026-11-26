@@ -1,0 +1,39 @@
+SentinelTrade — execução final da suíte automatizada com PostgreSQL
+Data: 26/11/2026
+Comando executado no terminal PowerShell do projeto: mvn clean test
+Banco de integração: sentineltrade_test (banco separado da demonstração)
+Configuração: SENTINEL_IT_DB_URL, SENTINEL_IT_DB_USER e SENTINEL_IT_DB_PASSWORD definidos no terminal; os valores não são registrados nesta evidência.
+
+RESULTADO FINAL
+  Tests run: 169
+  Failures:    0
+  Errors:      0
+  Skipped:     0
+  Build:       BUILD SUCCESS
+  Duração Maven: 20,513 s
+
+DETALHE POR CLASSE
+  AdministracaoRiscoTest                 12 aprovados
+  AuditoriaServiceTest                    6 aprovados
+  AutenticacaoServiceTest                13 aprovados
+  CotacaoServiceTest                      5 aprovados
+  OrdemMercadoEAlteracaoTest             19 aprovados
+  OrdemServiceTest                       24 aprovados
+  PrivacidadeEAcessoTest                  6 aprovados
+  ProcessadorOrdensTest                  15 aprovados
+  ValidacoesTest                         11 aprovados
+  OrdemTest                              12 aprovados
+  StatusOrdemTest                         5 aprovados
+  CorretoraResilienteTest                 5 aprovados
+  PostgresIntegracaoTest                  2 aprovados
+  CifradorSegredoTest                     8 aprovados
+  SegurancaCriptograficaTest               6 aprovados
+  JsonTest                                6 aprovados
+  ServidorWebTest                        14 aprovados
+                                        ----------------
+  Total                                 169 aprovados
+
+OBSERVAÇÕES
+- Os dois testes de PostgresIntegracaoTest foram executados, não ignorados. Eles validaram o fluxo completo com persistência e a concorrência real no banco.
+- O log apresentou advertências esperadas em testes que simulam indisponibilidade de cotações/corretora e conflitos concorrentes. Todas as classes terminaram com 0 falhas e 0 erros.
+- Esta é a execução local que realizamos no terminal PowerShell do projeto. Ela comprova os testes locais, mas não representa uma execução dos jobs do GitHub Actions.

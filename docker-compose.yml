@@ -1,0 +1,18 @@
+# PostgreSQL local para desenvolvimento. As credenciais vêm do arquivo .env (não versionado):
+#   cp .env.example .env   (preencher DB_USER e DB_PASSWORD)   →   docker compose up -d
+# schema.sql e seed.sql são executados automaticamente na primeira inicialização do volume.
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: sentineltrade
+      POSTGRES_USER: ${DB_USER:?defina DB_USER no .env}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?defina DB_PASSWORD no .env}
+    ports:
+      - "127.0.0.1:5432:5432"     # exposto somente no localhost
+    volumes:
+      - sentinel-dados:/var/lib/postgresql/data
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+      - ./database/seed.sql:/docker-entrypoint-initdb.d/02-seed.sql:ro
+volumes:
+  sentinel-dados:

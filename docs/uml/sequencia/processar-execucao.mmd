@@ -1,0 +1,40 @@
+sequenceDiagram
+  autonumber
+  participant W as ProcessadorOrdens (worker)
+  participant F as FilaOrdens
+  participant G as CorretoraResiliente
+  participant C as Corretora Simulada
+  participant TX as GerenciadorTransacao
+  participant DB as Repositórios
+  participant AUD as AuditoriaService
+  participant N as NotificacaoService
+
+  W->>F: disponiveis(agora)
+  F-->>W: mensagem (ordemId, tentativas)
+  W->>DB: buscarPorId(ordemId)
+  Note over W: se não estiver VALIDADA, descarta a mensagem
+  W->>G: enviar(idCliente = id da ordem)
+  G->>C: enviar (timeout + circuit breaker)
+  C-->>G: ack (idempotente por idCliente)
+  G-->>W: ack
+  W->>TX: executar
+  TX->>DB: Ordem ENVIADA
+  TX->>AUD: registrar(ORDEM_ENVIADA)
+  TX->>F: concluir(mensagem)
+
+  W->>G: consultarRelatorios()
+  G->>C: consultarRelatorios
+  C-->>W: execuções (pelo menos uma vez, podem repetir)
+  loop para cada relatório
+    W->>TX: executar(aplicarRelatorio)
+    TX->>DB: registrarSeNova(idExecucao)
+    alt execução já registrada
+      TX->>AUD: registrar(EXECUCAO_DUPLICADA_IGNORADA)
+    else nova execução
+      TX->>DB: Ordem.aplicarExecucao + Conta + Posicao (versão otimista)
+      TX->>AUD: registrar(ORDEM_EXECUTADA ou PARCIAL)
+      TX->>N: criar(notificação pendente)
+    end
+  end
+  W->>C: confirmarRelatorios(ids)
+  W->>N: despacharPendentes() — fora da transação

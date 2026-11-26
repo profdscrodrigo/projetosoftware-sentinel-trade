@@ -1,0 +1,151 @@
+SentinelTrade — saída real do roteiro automatizado de demonstração
+Comando: java -cp <classes> br.orion.sentineltrade.Main --demo   (ou: mvn -q compile exec:java -Dexec.args="--demo")
+Senhas e segredos MFA são gerados aleatoriamente a cada execução e nunca são impressos.
+------------------------------------------------------------------------
+SentinelTrade — demonstração automatizada (dados 100% simulados; relógio: 2026-11-24T14:00:00Z = terça 11:00 BRT)
+
+━━ 1. Autenticação (RF01/RF02/RNF01) ━━
+   ✔ senha errada → recusado: Credenciais inválidas ou conta temporariamente bloqueada
+   ✔ usuário inexistente (mensagem idêntica: sem enumeração) → recusado: Credenciais inválidas ou conta temporariamente bloqueada
+   senha correta → token PENDENTE (ainda sem acesso): acesso negado ✔
+   ✔ código MFA errado → recusado: Código de verificação inválido
+   código MFA correto → sessão ATIVA ✔
+   segredo MFA gravado no banco (AES-256-GCM, versionado): v1:ioL0usy9vyD… (79 caracteres; nunca em texto puro)
+   ✔ conta bloqueada após 5 falhas (mesmo com a senha correta) → recusado: Credenciais inválidas ou conta temporariamente bloqueada
+   +16 min: login do analista volta a funcionar ✔ (true)
+   ✔ controle de acesso por perfil: INVESTIDOR tenta cadastrar ativo → recusado: Acesso negado ao recurso solicitado
+
+━━ 2. Consultas: cotações e carteira (RF03/RF04) ━━
+   BOVA11    128.70  var   0.55%
+   ITUB4      33.20  var   0.61%
+   MXRF11     10.35  var   0.49%
+   PETR4      38.50  var   1.05%
+   VALE3      62.40  var  -0.79%
+   saldo R$ 100.000,00 (bloqueado R$ 0,00)
+   VALE3   qtd   200  PM    60.00  valor   12480.00
+
+━━ 3. Compra com ciclo de vida completo (RF05/RF08/RF09/RF11/RF17) ━━
+   COMPRA PETR4 100 @ 38.50  → VALIDADA
+   saldo disponível R$ 96.150,00 | bloqueado (reserva da ordem) R$ 3.850,00
+   [NOTIFICAÇÃO EXECUCAO] Ordem executada: COMPRA PETR4 100 @ 38.50 (acumulado 100/100)
+   após o worker (envio + execução + liquidação + notificação):
+   COMPRA PETR4 100 @ 38.50 → EXECUTADA (executado 100/100)
+   saldo R$ 96.150,00 (bloqueado R$ 0,00)
+   PETR4   qtd   100  PM    38.50  valor    3850.00
+   VALE3   qtd   200  PM    60.00  valor   12480.00
+
+━━ 4. Idempotência: reenvio com a mesma chave não duplica (RN03/RNF06) ━━
+   envio #1: ordem 3441fc3a duplicada=false
+   envio #2: ordem 3441fc3a duplicada=true
+   envio #3: ordem 3441fc3a duplicada=true
+   ordens no histórico: 2 (a ITUB4 conta uma vez) | saldo bloqueado: R$ 3.320,00
+   ✔ mesma chave com conteúdo diferente → recusado: Chave de idempotência já utilizada em outra ordem com conteúdo diferente
+   [NOTIFICAÇÃO EXECUCAO] Ordem executada: COMPRA ITUB4 100 @ 33.20 (acumulado 100/100)
+
+━━ 5. Validações de negócio e rejeições registradas (RF08) ━━
+   COMPRA BOVA11 500 @ 128.70  → REJEITADA [LIMITE_POR_ORDEM_EXCEDIDO] Limite de risco por ordem excedido
+   VENDA MXRF11 10 @ 10.35  → REJEITADA [POSICAO_INSUFICIENTE] Quantidade disponível do ativo insuficiente
+   COMPRA PETR4 10 @ 50.00  → REJEITADA [PRECO_FORA_DA_FAIXA] Preço fora da faixa permitida em relação à cotação
+   COMPRA VALE3 10 @ 62.40  → REJEITADA [ATIVO_INDISPONIVEL] Ativo indisponível para negociação
+   (analista de risco elevou os limites de Ana)
+   COMPRA MXRF11 10000 @ 10.35  → REJEITADA [SALDO_INSUFICIENTE] Saldo disponível insuficiente
+   saldo de Ana permanece: R$ 92.830,00
+
+━━ 6. Confirmação adicional para ordem de alto valor («extend») ━━
+   ✔ sem confirmação (R$ 26.950 > R$ 20.000) → recusado: Ordem de R$ 26.950,00 exige confirmação adicional (limite sem confirmação: R$ 20.000,00)
+   com confirmação → COMPRA PETR4 700 @ 38.50 → VALIDADA (executado 0/700)
+   [NOTIFICAÇÃO REJEICAO] Ordem COMPRA BOVA11 rejeitada: Limite de risco por ordem excedido (limite 50000.00)
+   [NOTIFICAÇÃO REJEICAO] Ordem VENDA MXRF11 rejeitada: Quantidade disponível do ativo insuficiente
+   [NOTIFICAÇÃO REJEICAO] Ordem COMPRA PETR4 rejeitada: Preço fora da faixa permitida em relação à cotação (máximo 10% da cotação 38.50)
+   [NOTIFICAÇÃO REJEICAO] Ordem COMPRA VALE3 rejeitada: Ativo indisponível para negociação (ativo suspenso)
+   [NOTIFICAÇÃO REJEICAO] Ordem COMPRA MXRF11 rejeitada: Saldo disponível insuficiente
+   [NOTIFICAÇÃO EXECUCAO] Ordem executada: COMPRA PETR4 700 @ 38.50 (acumulado 700/700)
+
+━━ 7. Execução parcial: corretora executa em lotes de 40 (RF09) ━━
+   VENDA PETR4 100 @ 38.50  → VALIDADA
+   [NOTIFICAÇÃO EXECUCAO_PARCIAL] Ordem parcialmente executada: VENDA PETR4 40 @ 38.50 (acumulado 40/100)
+   ciclo 1: VENDA PETR4 100 @ 38.50 → PARCIALMENTE_EXECUTADA (executado 40/100)
+   [NOTIFICAÇÃO EXECUCAO_PARCIAL] Ordem parcialmente executada: VENDA PETR4 40 @ 38.50 (acumulado 80/100)
+   ciclo 2: VENDA PETR4 100 @ 38.50 → PARCIALMENTE_EXECUTADA (executado 80/100)
+   [NOTIFICAÇÃO EXECUCAO] Ordem executada: VENDA PETR4 20 @ 38.50 (acumulado 100/100)
+   ciclo 3: VENDA PETR4 100 @ 38.50 → EXECUTADA (executado 100/100)
+   saldo de Bruno: R$ 103.850,00
+
+━━ 8. Cancelamento (RF07) ━━
+   COMPRA PETR4 100 @ 36.00  → VALIDADA
+   COMPRA PETR4 100 @ 36.00 → ENVIADA (executado 0/100)
+   cancelando… COMPRA PETR4 100 @ 36.00 → CANCELADA (executado 0/100)
+   saldo bloqueado após cancelar: R$ 0,00
+   ✔ cancelar ordem já EXECUTADA → recusado: Ordem não pode ser cancelada no estado atual (estado EXECUTADA)
+
+━━ 9. Ordem a mercado e alteração de ordem (RF21/RF22) ━━
+   COMPRA A MERCADO 100 PETR4: limite de PROTEÇÃO 42.35 (cotação 38.50 + faixa) → VALIDADA
+   [NOTIFICAÇÃO CANCELAMENTO] Ordem COMPRA PETR4 cancelada
+   [NOTIFICAÇÃO EXECUCAO] Ordem executada: COMPRA PETR4 100 @ 38.50 (acumulado 100/100)
+   após o worker: COMPRA A MERCADO PETR4 100 @ 42.35 (proteção) → EXECUTADA (executado 100/100) | executada ao preço de MERCADO
+   COMPRA PETR4 100 @ 36.00  → VALIDADA
+   COMPRA PETR4 100 @ 36.00 → ENVIADA (executado 0/100) (já na corretora)
+   ALTERAR (cancelar e substituir) →
+     original: COMPRA PETR4 100 @ 36.00 → CANCELADA (executado 0/100)
+     nova    : COMPRA PETR4 50 @ 35.00 → VALIDADA (executado 0/50) | substitui e58cd1ff
+     reserva da nova: R$ 1.750,00 (a da antiga foi devolvida)
+   ✔ alteração impossível (preço fora da faixa): a ordem NÃO é tocada → recusado: Preço fora da faixa permitida em relação à cotação (máximo 10% da cotação 38.50)
+   a nova segue intacta: COMPRA PETR4 50 @ 35.00 → VALIDADA (executado 0/50)
+   ✔ alterar ordem de outro investidor → recusado: Ordem não encontrada
+
+━━ 10. Falha da corretora: nada é apagado nem corrompido (RN07/RNF04) ━━
+   COMPRA VALE3 10 @ 62.40  → VALIDADA
+   [NOTIFICAÇÃO ALTERACAO] Ordem COMPRA PETR4 alterada; nova ordem VALIDADA
+   [NOTIFICAÇÃO CANCELAMENTO] Ordem COMPRA PETR4 cancelada
+   corretora com falha transitória → COMPRA VALE3 10 @ 62.40 → VALIDADA (executado 0/10) (continua na fila)
+   [NOTIFICAÇÃO EXECUCAO] Ordem executada: COMPRA VALE3 10 @ 62.40 (acumulado 10/10)
+   corretora voltou → COMPRA VALE3 10 @ 62.40 → EXECUTADA (executado 10/10)
+   COMPRA VALE3 10 @ 62.40  → VALIDADA
+   corretora FORA DO AR. saldo bloqueado: R$ 624,00
+   tentativa 1: COMPRA VALE3 10 @ 62.40 → VALIDADA (executado 0/10) | circuito: FECHADO
+   tentativa 2: COMPRA VALE3 10 @ 62.40 → VALIDADA (executado 0/10) | circuito: FECHADO
+   tentativa 3: COMPRA VALE3 10 @ 62.40 → VALIDADA (executado 0/10) | circuito: ABERTO
+   tentativa 4: COMPRA VALE3 10 @ 62.40 → VALIDADA (executado 0/10) | circuito: ABERTO
+   [NOTIFICAÇÃO FALHA] Ordem COMPRA VALE3 rejeitada: Falha de comunicação com a corretora
+   tentativa 5: COMPRA VALE3 10 @ 62.40 → REJEITADA (executado 0/10) — Falha de comunicação com a corretora | circuito: ABERTO
+   reserva devolvida; saldo bloqueado: R$ 0,00
+
+━━ 11. Provedor de cotações não confiável (dados externos revalidados) ━━
+   provedor envia PETR4 = -5,00 → sistema mantém a última válida: 38.50
+   provedor fora do ar → última cotação válida (recente): 38.50
+   3 min depois → marcada DESATUALIZADA: true
+   COMPRA PETR4 10 @ 38.50  → REJEITADA [COTACAO_DESATUALIZADA] Cotação desatualizada
+
+━━ 12. Mercado fechado ━━
+   COMPRA PETR4 10 @ 38.50  → REJEITADA [MERCADO_FECHADO] Mercado fechado
+
+━━ 13. Privacidade e controle de acesso (RNF08) ━━
+   ✔ Bruno consulta ordem da Ana → recusado: Ordem não encontrada
+   ✔ Bruno cancela ordem da Ana → recusado: Ordem não encontrada
+   ✔ ADMINISTRADOR tenta enviar ordem → recusado: Acesso negado ao recurso solicitado
+
+━━ 14. Entradas maliciosas (allowlist no servidor) ━━
+   ✔ ativo = PETR4'; DROP TABLE ordens;-- → recusado: Código de ativo inválido (formato esperado: PETR4, MXRF11)
+   ✔ ativo = <script>alert(1)</script> → recusado: Código de ativo inválido (formato esperado: PETR4, MXRF11)
+   ✔ ativo = ../../etc/passwd → recusado: Código de ativo inválido (formato esperado: PETR4, MXRF11)
+   ✔ quantidade = -5 → recusado: Quantidade inválida (inteiro positivo)
+
+━━ 15. Auditoria imutável com hash encadeado (RF10/RNF03) ━━
+   Verificacao[integra=true, seqProblema=0, motivo=Cadeia íntegra (91 eventos)]
+   #86 ORDEM_CRIADA ORDEM | COMPRA LIMITE PETR4 10 @ 38.50 | hash f5dc328e47d6…
+   #87 ORDEM_REJEITADA ORDEM | Mercado fechado | hash 66db7bfe9298…
+   #88 LOGIN_SUCESSO USUARIO | login com MFA | hash 4724827d6b91…
+   #89 LOGIN_SUCESSO USUARIO | login com MFA | hash b262a33a86da…
+   #90 LOGIN_SUCESSO USUARIO | login com MFA | hash a443b8775969…
+   #91 ACESSO_NEGADO SESSAO | perfil ADMINISTRADOR sem permissão | hash 5946c29b92bc…
+   simulando adulteração do evento #46 → Verificacao[integra=false, seqProblema=46, motivo=Conteúdo adulterado]
+   simulando remoção de um evento → Verificacao[integra=false, seqProblema=32, motivo=Sequência quebrada (evento removido ou inserido)]
+   total de eventos auditados: 91
+
+━━ Resumo final da carteira de Ana ━━
+   saldo R$ 61.406,00 (bloqueado R$ 0,00)
+   ITUB4   qtd   100  PM    33.20  valor    3320.00
+   PETR4   qtd   900  PM    38.50  valor   34650.00
+   VALE3   qtd   210  PM    60.11  valor   13104.00
+
+Fim da demonstração.

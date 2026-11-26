@@ -1,0 +1,32 @@
+sequenceDiagram
+  autonumber
+  actor I as Investidor
+  participant OS as OrdemService
+  participant G as CorretoraResiliente
+  participant C as Corretora Simulada
+  participant P as ProcessadorOrdens
+  participant TX as GerenciadorTransacao
+  participant DB as Repositórios
+  participant AUD as AuditoriaService
+
+  I->>OS: cancelarOrdem(token, idOrdem)
+  OS->>DB: buscarPorId (só se for do investidor)
+  alt EXECUTADA ou REJEITADA
+    OS-->>I: RegraNegocioException (não cancelável)
+  else ENVIADA ou PARCIALMENTE_EXECUTADA
+    OS->>G: cancelar(idOrdem)
+    G->>C: cancelar
+    alt corretora indisponível
+      OS-->>I: IntegracaoIndisponivelException — ordem inalterada
+    else corretora já executou tudo
+      C-->>OS: false
+      OS-->>I: RegraNegocioException
+    else cancelamento aceito
+      C-->>OS: true
+      OS->>P: coletarExecucoes() — aplica o que estava em trânsito
+    end
+  end
+  OS->>TX: executar(finalizarCancelamento)
+  TX->>DB: relê a ordem e chama cancelar(): devolve só a reserva restante
+  TX->>AUD: registrar(ORDEM_CANCELADA) + notificação
+  OS-->>I: ordem CANCELADA

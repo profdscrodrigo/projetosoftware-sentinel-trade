@@ -1,0 +1,30 @@
+flowchart TD
+  classDef dec fill:#FFF7E6,stroke:#B07A00
+  classDef fim fill:#FDECEC,stroke:#A33
+  classDef ok fill:#EAF7EA,stroke:#2E7D32
+  classDef ext fill:#EEE,stroke:#666,stroke-dasharray:4
+
+  W0((" ")) --> W1["Worker lê mensagem da fila durável<br/>(ordem VALIDADA aguardando envio)"]
+  W1 --> W2{"Ordem ainda<br/>está VALIDADA?"}:::dec
+  W2 -- não --> W9["Descarta a mensagem<br/>(cancelada ou rejeitada enquanto esperava)"]
+  W2 -- sim --> W3["Envia à corretora usando o id da ordem<br/>(idempotente) sob timeout e circuit breaker"]
+  W3 -.-> C0["Corretora/Bolsa Simulada"]:::ext
+  W3 --> W4{"Corretora<br/>respondeu?"}:::dec
+  W4 -- "sim, aceitou" --> W5["ENVIADA + auditoria"]:::ok
+  W4 -- "sim, recusou" --> W8
+  W4 -- não --> W6{"Tentativas < 5?"}:::dec
+  W6 -- sim --> W7["Reagenda com recuo exponencial<br/>(ordem, saldo e carteira intactos)"]
+  W6 -- não --> W8["REJEITADA por falha de integração<br/>+ devolve a reserva + notifica"]:::fim
+
+  W5 --> L0["Worker consulta relatórios de execução<br/>(entrega pelo menos uma vez)"]
+  C0 -.-> L0
+  L0 --> L1{"idExecucao já<br/>registrado?"}:::dec
+  L1 -- sim --> L2["Ignora a duplicata + auditoria"]
+  L1 -- não --> L3{"Ordem em estado terminal?"}:::dec
+  L3 -- sim --> L3a["Registra anomalia para conciliação manual<br/>(saldo não é alterado)"]:::fim
+  L3 -- não --> L3b{"Execução consistente com o<br/>preço limite e a quantidade restante?"}:::dec
+  L3b -- não --> L3c["Descarta como dado inválido + auditoria"]:::fim
+  L3b -- sim --> L4["Na mesma transação: atualiza a ordem,<br/>liquida saldo e carteira"]
+  L4 --> L5{"Quantidade total<br/>executada?"}:::dec
+  L5 -- sim --> L6["EXECUTADA + auditoria + notifica"]:::ok
+  L5 -- não --> L7["PARCIALMENTE_EXECUTADA + notifica<br/>(aguarda novas execuções)"]:::ok

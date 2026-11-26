@@ -1,0 +1,209 @@
+classDiagram
+  direction TB
+  %% Classes de PROJETO — pacote br.orion.sentineltrade.dominio
+
+  class Ordem {
+    <<abstract>>
+    -UUID id
+    -UUID investidorId
+    -Ticker ticker
+    -TipoOrdem tipo
+    -UUID substituiOrdemId
+    -int quantidade
+    -Dinheiro precoLimite
+    -String chaveIdempotencia
+    -String impressaoDigital
+    -StatusOrdem status
+    -int quantidadeExecutada
+    -Dinheiro valorExecutado
+    -CodigoRegra motivoRejeicao
+    -long versao
+    +nova(Lado, ...) Ordem$
+    +lado() Lado*
+    #reservar(Conta, Posicao)*
+    #liquidar(Conta, Posicao, int, Dinheiro)*
+    #liberarReservaRestante(Conta, Posicao)*
+    #precoAceitavel(Dinheiro) boolean*
+    +valorTotal() Dinheiro
+    +quantidadeRestante() int
+    +alteravel() boolean
+    +reservarEValidar(Conta, Posicao, Instant)
+    +marcarEnviada(Instant)
+    +aplicarExecucao(int, Dinheiro, Instant, Conta, Posicao)
+    +rejeitar(CodigoRegra, Instant, Conta, Posicao)
+    +cancelar(Instant, Conta, Posicao)
+  }
+  class OrdemCompra {
+    +lado() Lado
+    #reservar(Conta, Posicao)
+    #liquidar(Conta, Posicao, int, Dinheiro)
+  }
+  class OrdemVenda {
+    +lado() Lado
+    #reservar(Conta, Posicao)
+    #liquidar(Conta, Posicao, int, Dinheiro)
+  }
+  class StatusOrdem {
+    <<enumeration>>
+    CRIADA
+    VALIDADA
+    ENVIADA
+    PARCIALMENTE_EXECUTADA
+    EXECUTADA
+    REJEITADA
+    CANCELADA
+    +podeTransitarPara(StatusOrdem) boolean
+    +terminal() boolean
+    +mantemReserva() boolean
+  }
+  class CodigoRegra {
+    <<enumeration>>
+    SALDO_INSUFICIENTE
+    POSICAO_INSUFICIENTE
+    LIMITE_POR_ORDEM_EXCEDIDO
+    LIMITE_DIARIO_EXCEDIDO
+    MERCADO_FECHADO
+    ATIVO_INDISPONIVEL
+    COTACAO_DESATUALIZADA
+    PRECO_FORA_DA_FAIXA
+    FALHA_INTEGRACAO
+    ORDEM_NAO_CANCELAVEL
+    ORDEM_NAO_ALTERAVEL
+  }
+  class TipoOrdem {
+    <<enumeration>>
+    LIMITE
+    MERCADO
+  }
+  class Lado {
+    <<enumeration>>
+    COMPRA
+    VENDA
+  }
+  class Conta {
+    -UUID id
+    -UUID investidorId
+    -Dinheiro saldoDisponivel
+    -Dinheiro saldoBloqueado
+    -long versao
+    +depositar(Dinheiro)
+    +bloquear(Dinheiro)
+    +liberar(Dinheiro)
+    +consumirReserva(Dinheiro, Dinheiro)
+    +creditar(Dinheiro)
+  }
+  class Posicao {
+    -UUID investidorId
+    -Ticker ticker
+    -int quantidade
+    -int quantidadeBloqueada
+    -Dinheiro custoTotal
+    -long versao
+    +bloquear(int)
+    +liberar(int)
+    +baixarBloqueada(int)
+    +adicionar(int, Dinheiro)
+    +precoMedio() Dinheiro
+  }
+  class Dinheiro {
+    <<value object>>
+    -BigDecimal valor
+    +mais(Dinheiro) Dinheiro
+    +menos(Dinheiro) Dinheiro
+    +vezes(long) Dinheiro
+    +compareTo(Dinheiro) int
+  }
+  class Ticker {
+    <<record>>
+    +String codigo
+    +de(String) Ticker$
+  }
+  class Usuario {
+    -UUID id
+    -String nome
+    -String email
+    -Papel papel
+    -String senhaHash
+    -String segredoMfa
+    -int falhasLogin
+    -Instant bloqueadoAte
+    +bloqueado(Instant) boolean
+    +registrarFalhaLogin(Instant, int, Duration)
+    +registrarSucessoLogin()
+  }
+  class Papel {
+    <<enumeration>>
+    INVESTIDOR
+    ADMINISTRADOR
+    ANALISTA_RISCO
+  }
+  class Sessao {
+    -UUID id
+    -Papel papel
+    -Estado estado
+    -String tokenHash
+    -Instant expiraEm
+    -int tentativasMfa
+    +valida(Instant, Estado) boolean
+    +registrarFalhaMfa() int
+    +revogar()
+  }
+  class Ativo {
+    -Ticker ticker
+    -String nome
+    -TipoAtivo tipo
+    -StatusAtivo status
+    +negociavel() boolean
+  }
+  class LimiteRisco {
+    -Dinheiro valorMaximoPorOrdem
+    -Dinheiro limiteDiario
+    -Dinheiro valorConfirmacao
+  }
+  class Cotacao {
+    <<record>>
+    +Ticker ticker
+    +Dinheiro preco
+    +Dinheiro fechamentoAnterior
+    +Instant instante
+    +variacaoPercentual() BigDecimal
+  }
+  class Execucao {
+    <<record>>
+    +String idExecucao
+    +UUID ordemId
+    +int quantidade
+    +Dinheiro preco
+  }
+  class Notificacao {
+    -TipoNotificacao tipo
+    -String mensagem
+    -Instant enviadaEm
+  }
+  class EventoAuditoria {
+    <<record>>
+    +long seq
+    +String tipo
+    +String hashAnterior
+    +String hash
+  }
+
+  Ordem <|-- OrdemCompra
+  Ordem <|-- OrdemVenda
+  Ordem --> StatusOrdem
+  Ordem --> CodigoRegra
+  Ordem --> Lado
+  Ordem --> TipoOrdem
+  Ordem --> Ticker
+  Ordem --> Dinheiro
+  Ordem ..> Conta : reserva e liquida
+  Ordem ..> Posicao : reserva e liquida
+  Conta --> Dinheiro
+  Posicao --> Ticker
+  Posicao --> Dinheiro
+  Usuario --> Papel
+  Sessao --> Papel
+  Ativo --> Ticker
+  Cotacao --> Ticker
+  LimiteRisco --> Dinheiro
+  Execucao --> Dinheiro

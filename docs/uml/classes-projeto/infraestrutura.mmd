@@ -1,0 +1,134 @@
+classDiagram
+  direction TB
+  %% Classes de PROJETO — adaptadores (infraestrutura), interface de console e composition root
+
+  class CorretoraGateway {
+    <<interface>>
+  }
+  class ProvedorCotacoes {
+    <<interface>>
+  }
+  class EnviadorNotificacao {
+    <<interface>>
+  }
+  class HasherSenha {
+    <<interface>>
+  }
+  class ServicoMfa {
+    <<interface>>
+  }
+  class GerenciadorTransacao {
+    <<interface>>
+  }
+  class Repositorios {
+    <<interface>>
+    12 portas de persistencia
+  }
+
+  class CorretoraSimulada {
+    -Map livro
+    -Map naoConfirmados
+    +setIndisponivel(boolean)
+    +falharProximas(int)
+    +setLoteMaximo(int)
+    +setDuplicarRelatorios(boolean)
+  }
+  class CorretoraResiliente {
+    <<decorator>>
+    -Estado estado
+    -Duration timeout
+    -int limiteFalhas
+    +estado() Estado
+  }
+  class CotacoesSimuladas {
+    +definir(ticker, preco, fechamento)
+    +injetarBruta(Cotacao)
+    +variar(Random)
+    +setIndisponivel(boolean)
+  }
+  class EnviadorNotificacaoConsole
+  class Pbkdf2Hasher { -int iteracoes }
+  class CifradorSegredo {
+    -SecretKeySpec chave
+    +cifrar(String) String
+    +decifrar(String) String
+    +gerarChaveBase64() String$
+  }
+  class ServidorWeb {
+    +iniciar(String, int) int
+    +parar()
+  }
+  class Json {
+    <<package-private>>
+    +escrever(Object) String$
+    +lerObjetoPlano(String, Set) Map$
+  }
+  class TotpMfa {
+    +gerarSegredo() String
+    +verificar(segredo, codigo, Instant) boolean
+    +hotp(byte[], long, int) String$
+  }
+  class RelogioAjustavel { +avancar(Duration) +definir(Instant) }
+
+  class BancoEmMemoria { +transacao() +ordens() +contas() }
+  class RepositoriosJdbc { +persistencia(TransacaoJdbc) Persistencia$ }
+  class TransacaoJdbc {
+    -ThreadLocal~Connection~ atual
+    +executar(Supplier~T~) T
+  }
+  class Jdbc {
+    +atualizar(sql, params) int
+    +consultar(sql, Mapeador, params) List
+  }
+
+  class Aplicacao {
+    <<composition root>>
+    +emMemoria(Clock, Config, PrintStream) Aplicacao$
+    +comJdbc(Clock, Config, PrintStream) Aplicacao$
+    +iniciarWorker(long)
+  }
+  class Config {
+    <<record>>
+    +carregar() Config$
+  }
+  class DadosDemonstracao { +carregar(Aplicacao, Map) List~Credencial~$ }
+  class Main
+  class CliApp { +executar() }
+  class DemoScript { +executar() }
+
+  CorretoraGateway <|.. CorretoraSimulada
+  CorretoraGateway <|.. CorretoraResiliente
+  CorretoraResiliente o-- CorretoraGateway : delega
+  ProvedorCotacoes <|.. CotacoesSimuladas
+  EnviadorNotificacao <|.. EnviadorNotificacaoConsole
+  HasherSenha <|.. Pbkdf2Hasher
+  ServicoMfa <|.. TotpMfa
+  TotpMfa --> CifradorSegredo : cifra o segredo
+  ServidorWeb --> Json
+  Main --> ServidorWeb : modo web
+  ServidorWeb --> Aplicacao
+  GerenciadorTransacao <|.. TransacaoJdbc
+  GerenciadorTransacao <|.. BancoEmMemoria
+  Repositorios <|.. BancoEmMemoria
+  Repositorios <|.. RepositoriosJdbc
+  RepositoriosJdbc --> Jdbc
+  Jdbc --> TransacaoJdbc
+  CorretoraSimulada --> ProvedorCotacoes
+  CorretoraSimulada --> RelogioAjustavel : Clock
+  CotacoesSimuladas --> RelogioAjustavel : Clock
+
+  Main --> Aplicacao
+  Main --> CliApp
+  Main --> DemoScript
+  Main --> Config
+  Aplicacao --> CorretoraResiliente
+  Aplicacao --> CorretoraSimulada
+  Aplicacao --> CotacoesSimuladas
+  Aplicacao --> Pbkdf2Hasher
+  Aplicacao --> TotpMfa
+  Aplicacao --> BancoEmMemoria : modo memory
+  Aplicacao --> RepositoriosJdbc : modo jdbc
+  CliApp --> Aplicacao
+  DemoScript --> Aplicacao
+  DemoScript --> RelogioAjustavel
+  DadosDemonstracao --> Aplicacao

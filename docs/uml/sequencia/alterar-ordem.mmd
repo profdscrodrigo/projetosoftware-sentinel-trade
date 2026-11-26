@@ -1,0 +1,42 @@
+sequenceDiagram
+  autonumber
+  actor I as Investidor
+  participant OS as OrdemService
+  participant V as ValidadorOrdem
+  participant G as CorretoraResiliente
+  participant C as Corretora Simulada
+  participant P as ProcessadorOrdens
+  participant TX as GerenciadorTransacao
+  participant DB as Repositórios
+  participant AUD as AuditoriaService
+
+  I->>OS: alterarOrdem(token, idOrdem, quantidade, preço, chaveNova, confirmada)
+  OS->>DB: buscar a ordem (só se for do investidor)
+  OS->>DB: a chaveNova já existe?
+  alt ordem não alterável (terminal ou com execuções)
+    OS-->>I: RegraNegocioException ORDEM_NAO_ALTERAVEL
+  end
+  Note over OS,V: Pré-validações SEM efeito colateral
+  OS->>V: precoDeProtecao (se a mercado) e validarMercado
+  OS->>DB: limites, saldo ou posição (contando a reserva a devolver)
+  alt alguma regra falhou
+    OS-->>I: recusa — a ordem original permanece intacta
+  end
+  opt a ordem já está ENVIADA
+    OS->>G: cancelar(idOrdem)
+    G->>C: cancelar
+    alt corretora indisponível
+      OS-->>I: IntegracaoIndisponivelException — ordem inalterada
+    else já executada
+      OS-->>I: ORDEM_NAO_ALTERAVEL
+    end
+    OS->>P: coletarExecucoes()
+  end
+  OS->>TX: executar(substituir)
+  TX->>DB: ordem original CANCELADA (devolve a reserva)
+  TX->>AUD: registrar(ORDEM_CANCELADA)
+  TX->>DB: NOVA ordem CRIADA (substitui_ordem_id = original)
+  TX->>DB: risco, reserva, VALIDADA e fila
+  TX->>AUD: registrar(ORDEM_ALTERADA)
+  TX-->>OS: commit (tudo junto)
+  OS-->>I: original CANCELADA + nova ordem

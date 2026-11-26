@@ -1,0 +1,24 @@
+sequenceDiagram
+  autonumber
+  participant W as ProcessadorOrdens
+  participant F as FilaOrdens
+  participant G as CorretoraResiliente
+  participant C as Corretora Simulada
+  participant DB as Repositórios
+  participant N as NotificacaoService
+  Note over C: corretora indisponível
+  loop até 5 tentativas
+    W->>F: disponiveis(agora)
+    W->>G: enviar(ordem)
+    G->>C: enviar
+    C--xG: falha ou timeout
+    G-->>W: IntegracaoException
+    Note over G: N falhas seguidas abrem o circuito,<br/>com o circuito aberto nem chama a corretora
+    alt tentativas < 5
+      W->>F: reagendar(proxima = agora + 2s·2^n, máx. 60 s)
+      Note over DB: ordem VALIDADA, saldo e carteira intactos
+    else tentativas esgotadas
+      W->>DB: Ordem REJEITADA (FALHA_INTEGRACAO) + devolve a reserva
+      W->>N: criar(FALHA) + auditoria
+    end
+  end

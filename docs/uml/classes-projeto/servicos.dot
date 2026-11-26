@@ -1,0 +1,58 @@
+digraph servicos { rankdir=LR; splines=true; nodesep=0.25; ranksep=1.2; fontname="Helvetica"; labelloc=t; fontsize=22;
+ label="Diagrama de Classes de Projeto — Serviços da camada de aplicação (pacote aplicacao.servico)\n ";
+ node [fontname="Helvetica"]; edge [fontname="Helvetica", fontsize=9, color="#444444", arrowhead=open];
+ subgraph cluster_a { label="Casos de uso (expostos à interface; recebem o token da sessão)"; style=dashed; color="#7A9CC6"; fontsize=13;
+  os [shape=plain, label=<<TABLE BORDER="1" COLOR="#333333" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#E8F1FF"><TR><TD><B>OrdemService</B></TD></TR><HR/><TR><TD ALIGN="LEFT"><FONT POINT-SIZE="10">enviarOrdem(token, SolicitacaoOrdem) : ResultadoEnvio<BR ALIGN="LEFT"/>alterarOrdem(token, id, qtd, preco, chave, confirmada) : ResultadoAlteracao<BR ALIGN="LEFT"/>cancelarOrdem(token, idOrdem) : Ordem<BR ALIGN="LEFT"/>consultarOrdem(token, idOrdem) : Ordem<BR ALIGN="LEFT"/>historico(token) : List&lt;Ordem&gt;<BR ALIGN="LEFT"/>execucoesDaOrdem(token, idOrdem) : List&lt;Execucao&gt;<BR ALIGN="LEFT"/></FONT></TD></TR></TABLE>>];
+  cs [shape=plain, label=<<TABLE BORDER="1" COLOR="#333333" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#E8F1FF"><TR><TD><B>CarteiraService</B></TD></TR><HR/><TR><TD ALIGN="LEFT"><FONT POINT-SIZE="10">consultarSaldo(token) : SaldoConta<BR ALIGN="LEFT"/>consultarCarteira(token) : ResumoCarteira<BR ALIGN="LEFT"/></FONT></TD></TR></TABLE>>];
+  cot [shape=plain, label=<<TABLE BORDER="1" COLOR="#333333" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#E8F1FF"><TR><TD><B>CotacaoService</B></TD></TR><HR/><TR><TD ALIGN="LEFT"><FONT POINT-SIZE="10">obter(Ticker) : Optional&lt;CotacaoConsultada&gt;<BR ALIGN="LEFT"/>consultar(token, ticker)<BR ALIGN="LEFT"/>listar(token)<BR ALIGN="LEFT"/></FONT></TD></TR></TABLE>>];
+  ads [shape=plain, label=<<TABLE BORDER="1" COLOR="#333333" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#E8F1FF"><TR><TD><B>AdministracaoService</B></TD></TR><HR/><TR><TD ALIGN="LEFT"><FONT POINT-SIZE="10">cadastrarInvestidor(token, nome, email, senha) : UUID<BR ALIGN="LEFT"/>depositarSimulado(token, id, valor)<BR ALIGN="LEFT"/>cadastrarAtivo(token, ticker, nome, tipo)<BR ALIGN="LEFT"/>alterarStatusAtivo(token, ticker, status)<BR ALIGN="LEFT"/>definirParametro(token, chave, valor)<BR ALIGN="LEFT"/>consultarAuditoria(token, aposSeq, limite)<BR ALIGN="LEFT"/>verificarIntegridadeAuditoria(token)<BR ALIGN="LEFT"/></FONT></TD></TR></TABLE>>];
+  rs [shape=plain, label=<<TABLE BORDER="1" COLOR="#333333" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#E8F1FF"><TR><TD><B>RiscoService</B></TD></TR><HR/><TR><TD ALIGN="LEFT"><FONT POINT-SIZE="10">definirLimites(token, id, max, diario, confirmacao)<BR ALIGN="LEFT"/>consultarLimites(token, id)<BR ALIGN="LEFT"/>ordensRejeitadas(token)<BR ALIGN="LEFT"/></FONT></TD></TR></TABLE>>];
+  ns [shape=plain, label=<<TABLE BORDER="1" COLOR="#333333" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#E8F1FF"><TR><TD><B>NotificacaoService</B></TD></TR><HR/><TR><TD ALIGN="LEFT"><FONT POINT-SIZE="10">criar(UUID, TipoNotificacao, String)<BR ALIGN="LEFT"/>despacharPendentes() : int<BR ALIGN="LEFT"/>minhasNotificacoes(token)<BR ALIGN="LEFT"/></FONT></TD></TR></TABLE>>];
+ }
+ subgraph cluster_m { label="Motor assíncrono"; style=dashed; color="#C9A227"; fontsize=13;
+  po [shape=plain, label=<<TABLE BORDER="1" COLOR="#333333" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#FFF4D6"><TR><TD><B>ProcessadorOrdens</B></TD></TR><HR/><TR><TD ALIGN="LEFT"><FONT POINT-SIZE="10">ciclo() : int<BR ALIGN="LEFT"/>processarFila() : int<BR ALIGN="LEFT"/>coletarExecucoes() : int<BR ALIGN="LEFT"/>aplicarRelatorio(RelatorioExecucao)<BR ALIGN="LEFT"/></FONT></TD></TR></TABLE>>];
+ }
+ subgraph cluster_t { label="Serviços de apoio e transversais"; style=dashed; color="#8E6BBF"; fontsize=13;
+  vo [shape=plain, label=<<TABLE BORDER="1" COLOR="#333333" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#F0E8FF"><TR><TD><B>ValidadorOrdem</B></TD></TR><HR/><TR><TD ALIGN="LEFT"><FONT POINT-SIZE="10">validarMercado(Ticker, Dinheiro, Instant)<BR ALIGN="LEFT"/>validarRisco(Ordem, LimiteRisco, Dinheiro)<BR ALIGN="LEFT"/>precoDeProtecao(Ticker, Lado) : Dinheiro  // ordem a mercado<BR ALIGN="LEFT"/></FONT></TD></TR></TABLE>>];
+  cm [shape=plain, label=<<TABLE BORDER="1" COLOR="#333333" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#F0E8FF"><TR><TD><B>CalendarioMercado</B></TD></TR><HR/><TR><TD ALIGN="LEFT"><FONT POINT-SIZE="10">aberto(Instant) : boolean<BR ALIGN="LEFT"/></FONT></TD></TR></TABLE>>];
+  ps [shape=plain, label=<<TABLE BORDER="1" COLOR="#333333" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#F0E8FF"><TR><TD><B>ParametrosSistema</B></TD></TR><HR/><TR><TD ALIGN="LEFT"><FONT POINT-SIZE="10">definir(chave, valor)  // allowlist de chaves<BR ALIGN="LEFT"/></FONT></TD></TR></TABLE>>];
+  au [shape=plain, label=<<TABLE BORDER="1" COLOR="#333333" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#F0E8FF"><TR><TD><B>AutenticacaoService</B></TD></TR><HR/><TR><TD ALIGN="LEFT"><FONT POINT-SIZE="10">iniciarLogin(email, senha) : String<BR ALIGN="LEFT"/>confirmarMfa(tokenPendente, codigo) : String<BR ALIGN="LEFT"/>exigir(token, Papel...) : Sessao<BR ALIGN="LEFT"/>encerrar(token)<BR ALIGN="LEFT"/></FONT></TD></TR></TABLE>>];
+  ad [shape=plain, label=<<TABLE BORDER="1" COLOR="#333333" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#F0E8FF"><TR><TD><B>AuditoriaService</B></TD></TR><HR/><TR><TD ALIGN="LEFT"><FONT POINT-SIZE="10">registrar(TipoEvento, ...) : EventoAuditoria<BR ALIGN="LEFT"/>verificarIntegridade() : Verificacao<BR ALIGN="LEFT"/>verificarCadeia(List&lt;EventoAuditoria&gt;) : Verificacao  // estático<BR ALIGN="LEFT"/></FONT></TD></TR></TABLE>>];
+  lt [shape=plain, label=<<TABLE BORDER="1" COLOR="#333333" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#F0E8FF"><TR><TD><B>LimitadorDeTaxa</B></TD></TR><HR/><TR><TD ALIGN="LEFT"><FONT POINT-SIZE="10">registrar(chave, maximo, Duration)<BR ALIGN="LEFT"/></FONT></TD></TR></TABLE>>];
+  va [shape=plain, label=<<TABLE BORDER="1" COLOR="#333333" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#F0E8FF"><TR><TD><B>Validacoes</B></TD></TR><HR/><TR><TD ALIGN="LEFT"><FONT POINT-SIZE="10">ordem(SolicitacaoOrdem) : OrdemValidada  // estático<BR ALIGN="LEFT"/>senha(), email(), nome(), ...<BR ALIGN="LEFT"/></FONT></TD></TR></TABLE>>];
+  sa [shape=plain, label=<<TABLE BORDER="1" COLOR="#333333" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#F0E8FF"><TR><TD><B>Sanitizador</B></TD></TR><HR/><TR><TD ALIGN="LEFT"><FONT POINT-SIZE="10">paraLog(String) : String  // estático<BR ALIGN="LEFT"/></FONT></TD></TR></TABLE>>];
+  re [shape=plain, label=<<TABLE BORDER="1" COLOR="#333333" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#F0E8FF"><TR><TD><B>Retentativa</B></TD></TR><HR/><TR><TD ALIGN="LEFT"><FONT POINT-SIZE="10">comConflito(max, Supplier&lt;T&gt;) : T  // estático<BR ALIGN="LEFT"/></FONT></TD></TR></TABLE>>];
+ }
+ os -> au;
+ os -> vo;
+ os -> po;
+ os -> ad;
+ os -> ns;
+ os -> lt;
+ os -> va;
+ os -> ps;
+ os -> re;
+ cs -> au;
+ cs -> cot;
+ ads -> au;
+ ads -> ad;
+ ads -> ps;
+ rs -> au;
+ rs -> ad;
+ ns -> au;
+ po -> ad;
+ po -> ns;
+ po -> re;
+ vo -> cot;
+ vo -> cm;
+ vo -> ps;
+ cm -> ps;
+ cot -> ps;
+ cot -> au;
+ au -> ad;
+ au -> lt;
+ au -> va;
+ au -> re;
+ ad -> sa;
+ ns -> sa;
+}

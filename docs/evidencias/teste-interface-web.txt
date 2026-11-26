@@ -1,0 +1,15 @@
+SentinelTrade — teste da interface web em navegador real (Chromium headless, Playwright)
+Servidor: java -cp <classes>:src/main/resources br.orion.sentineltrade.Main --web   (SENTINEL_MARKET_ALWAYS_OPEN=true)
+O navegador também vigia erros de console e violações da CSP.
+------------------------------------------------------------------------
+✔ login com senha + MFA (autenticador simulado) → tela do investidor
+✔ cotações e ativos carregados
+✔ ordem de compra enviada e EXECUTADA pelo worker (status atualiza sozinho)
+✔ ordem de alto valor pede confirmação adicional
+✔ confirmação reenvia com a mesma chave de idempotência
+✔ alteração (cancelar e substituir) pela interface
+✔ ordem original (R$ 36,00) CANCELADA e nova ordem (R$ 35,00) criada e ligada a ela
+✔ ordem a mercado (campo de preço desabilitado)
+✔ login do administrador → tela administrativa
+✔ verificação da trilha de auditoria pela interface
+✔ nenhum erro de console, nenhuma violação de CSP

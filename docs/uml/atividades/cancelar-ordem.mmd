@@ -1,0 +1,24 @@
+flowchart TD
+  classDef dec fill:#FFF7E6,stroke:#B07A00
+  classDef fim fill:#FDECEC,stroke:#A33
+  classDef ok fill:#EAF7EA,stroke:#2E7D32
+
+  A0((" ")) --> A1["Investidor solicita cancelamento<br/>informando o id da ordem"]
+  A1 --> A2["Valida sessão, perfil e formato do id"]
+  A2 --> A3{"A ordem existe e<br/>pertence ao investidor?"}:::dec
+  A3 -- não --> F1["Recusa: ordem não encontrada<br/>(não revela se o id existe)"]:::fim
+  A3 -- sim --> A4{"Estado atual"}:::dec
+  A4 -- "EXECUTADA ou REJEITADA" --> F2["Recusa: ordem não cancelável"]:::fim
+  A4 -- CANCELADA --> F3["Devolve a ordem (idempotente)"]:::ok
+  A4 -- "CRIADA ou VALIDADA<br/>ainda não transmitida" --> L1
+  A4 -- "ENVIADA ou<br/>PARCIALMENTE_EXECUTADA" --> C1
+  C1["Solicita cancelamento à corretora<br/>(timeout + circuit breaker)"] --> C2{"Corretora<br/>respondeu?"}:::dec
+  C2 -- não --> F4["Erro controlado: a ordem NÃO foi cancelada;<br/>estado e reserva permanecem intactos"]:::fim
+  C2 -- sim --> C3{"Corretora aceitou?"}:::dec
+  C3 -- "não: já executada" --> F2
+  C3 -- sim --> C4["Coleta execuções em trânsito<br/>e aplica (idempotente)"]
+  C4 --> L1
+  L1["Abre transação: relê a ordem"] --> L2{"Ainda cancelável?"}:::dec
+  L2 -- não --> F2
+  L2 -- sim --> L3["CANCELADA — devolve somente a reserva restante<br/>(parte executada é preservada)"]
+  L3 --> L4["Auditoria ORDEM_CANCELADA + notificação<br/>(mesma transação)"]:::ok

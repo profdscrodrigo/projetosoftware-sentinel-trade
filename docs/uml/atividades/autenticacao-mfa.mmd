@@ -1,0 +1,16 @@
+flowchart TD
+  classDef dec fill:#FFF7E6,stroke:#B07A00
+  classDef fim fill:#FDECEC,stroke:#A33
+  classDef ok fill:#EAF7EA,stroke:#2E7D32
+
+  A0((" ")) --> A1["Informa e-mail e senha"]
+  A1 --> A2["Limitador de taxa: ≤ 10 tentativas/min por e-mail"]
+  A2 --> A3["Busca usuário<br/>(se não existir, verifica um hash falso<br/>para igualar o tempo de resposta)"]
+  A3 --> A4{"Usuário existe, ativo, não bloqueado<br/>e senha confere (PBKDF2)?"}:::dec
+  A4 -- não --> F1["Conta falha, aplica bloqueio de 15 min<br/>após 5 falhas, audita e responde<br/>com mensagem ÚNICA"]:::fim
+  A4 -- sim --> A5["Zera falhas e cria sessão PENDENTE_MFA (5 min)"]
+  A5 --> B1["Informa o código TOTP de 6 dígitos"]
+  B1 --> B2{"Sessão pendente válida<br/>e código correto?"}:::dec
+  B2 -- não --> B3["Conta tentativa; na 3ª, revoga a pendência;<br/>audita MFA_FALHA"]:::fim
+  B2 -- sim --> B4["Revoga a pendência (uso único) e cria<br/>NOVO token de sessão ATIVA (15 min)"]
+  B4 --> B5["Auditoria LOGIN_SUCESSO"]:::ok

@@ -1,0 +1,22 @@
+stateDiagram-v2
+  [*] --> CRIADA : ordem aceita e gravada (chave de idempotência única)
+  CRIADA --> VALIDADA : regras de mercado e risco OK + reserva de saldo/posição
+  CRIADA --> REJEITADA : regra de negócio violada
+  CRIADA --> CANCELADA : cancelamento do investidor
+  VALIDADA --> ENVIADA : corretora aceitou
+  VALIDADA --> REJEITADA : corretora recusou ou tentativas esgotadas (falha de integração)
+  VALIDADA --> CANCELADA : cancelamento antes da transmissão
+  ENVIADA --> PARCIALMENTE_EXECUTADA : execução parcial
+  ENVIADA --> EXECUTADA : execução total
+  ENVIADA --> REJEITADA : rejeição tardia da corretora
+  ENVIADA --> CANCELADA : cancelamento aceito pela corretora
+  PARCIALMENTE_EXECUTADA --> PARCIALMENTE_EXECUTADA : nova execução parcial
+  PARCIALMENTE_EXECUTADA --> EXECUTADA : completa a quantidade
+  PARCIALMENTE_EXECUTADA --> CANCELADA : cancela o saldo remanescente
+  EXECUTADA --> [*]
+  REJEITADA --> [*]
+  CANCELADA --> [*]
+  note right of EXECUTADA
+    Estados terminais não têm saída (RN04).
+    Toda transição gera auditoria (RN05).
+  end note

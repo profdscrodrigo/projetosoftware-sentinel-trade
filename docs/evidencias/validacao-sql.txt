@@ -1,0 +1,29 @@
+SentinelTrade — validação do banco de dados (esquema, carga e comandos SQL do código Java)
+Motor usado nesta verificação: SQLite 3.45.1 (sem PostgreSQL no ambiente de geração).
+Limite: valida tabelas, colunas, restrições e sintaxe SQL padrão; NÃO valida gatilhos/papéis de database/hardening-postgres.sql.
+Para validar no PostgreSQL:  docker compose up -d  e depois  mvn test -Dtest=PostgresIntegracaoTest  (ver README)
+----------------------------------------------------------------------------------------------------
+tabelas criadas: ativos, auditoria, contas, execucoes, fila_ordens, limites_risco, notificacoes, ordens, parametros, posicoes, sessoes, usuarios
+seed: 5 ativos, 6 parâmetros
+comandos SQL do código Java preparados contra o esquema: 45/45 válidos
+concatenações de entrada em SQL (SQL injection) no JDBC: 0
+
+Restrições de integridade exercitadas (cada tentativa abaixo é uma violação intencional):
+  saldo negativo                                   BLOQUEADO — CHECK constraint failed
+  perfil inexistente                               BLOQUEADO — CHECK constraint failed
+  ordem válida                                     ACEITO
+  ordem a mercado válida                           ACEITO
+  tipo de ordem inexistente (STOP)                 BLOQUEADO — CHECK constraint failed
+  reenvio com a mesma chave de idempotência        BLOQUEADO — UNIQUE constraint failed
+  quantidade zero                                  BLOQUEADO — CHECK constraint failed
+  preço negativo                                   BLOQUEADO — CHECK constraint failed
+  estado fora da lista (VOLTOU)                    BLOQUEADO — CHECK constraint failed
+  REJEITADA sem motivo                             BLOQUEADO — CHECK constraint failed
+  substituta de ordem inexistente (FK)             BLOQUEADO — FOREIGN KEY constraint failed
+  substituta de ordem existente                    ACEITO
+  bloqueada > quantidade na posição                BLOQUEADO — CHECK constraint failed
+  execução nova                                    ACEITO
+  execução duplicada (mesmo id da corretora)       BLOQUEADO — UNIQUE constraint failed
+  limites incoerentes (diário < por ordem)         BLOQUEADO — CHECK constraint failed
+  notificação de tipo inexistente                  BLOQUEADO — CHECK constraint failed
+  notificação de alteração (válida)                ACEITO

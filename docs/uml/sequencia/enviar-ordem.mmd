@@ -1,0 +1,45 @@
+sequenceDiagram
+  autonumber
+  actor I as Investidor
+  participant UI as Interface (CLI)
+  participant OS as OrdemService
+  participant AUT as AutenticacaoService
+  participant V as ValidadorOrdem
+  participant CS as CotacaoService
+  participant P as Provedor de Cotações
+  participant TX as GerenciadorTransacao
+  participant DB as Repositórios
+  participant AUD as AuditoriaService
+  participant F as FilaOrdens
+
+  I->>UI: ordem (lado, ativo, quantidade, preço) + chave de idempotência
+  UI->>OS: enviarOrdem(token, solicitação)
+  OS->>AUT: exigir(token, INVESTIDOR)
+  OS->>OS: valida entrada por allowlist
+  OS->>DB: buscarPorChave(investidor, chave)
+  alt chave já usada
+    OS-->>UI: ordem existente (duplicada = true)
+  else chave nova
+    opt valor acima do limite de confirmação
+      OS-->>UI: ConfirmacaoNecessariaException
+      I->>UI: confirma e reenvia com a mesma chave
+    end
+    OS->>V: validarMercado(ativo, preço)  — fora da transação
+    V->>CS: obter(ativo)
+    CS->>P: cotação (dado não confiável, revalidado)
+    OS->>TX: executar(registrar)
+    TX->>DB: inserir Ordem CRIADA (chave única)
+    TX->>AUD: registrar(ORDEM_CRIADA)
+    TX->>V: validarRisco(ordem, limites, negociado no dia)
+    TX->>DB: Conta.bloquear ou Posicao.bloquear (versão otimista)
+    alt regra violada
+      TX->>DB: Ordem REJEITADA + notificação pendente
+      TX->>AUD: registrar(ORDEM_REJEITADA)
+    else tudo certo
+      TX->>DB: Ordem VALIDADA
+      TX->>F: publicar(mensagem)
+      TX->>AUD: registrar(ORDEM_VALIDADA)
+    end
+    TX-->>OS: commit (ordem, reserva, fila e auditoria juntos)
+    OS-->>UI: resultado (status da ordem)
+  end

@@ -1,0 +1,89 @@
+flowchart LR
+  classDef comp fill:#F4F8FF,stroke:#2B4C7E
+  classDef port fill:#FFF7E6,stroke:#B07A00
+  classDef ext fill:#EEE,stroke:#666,stroke-dasharray:4
+  classDef db fill:#EAF7EA,stroke:#2E7D32
+
+  subgraph UI["Interface (apresentação)"]
+    CLI["«componente»<br/>Console CLI / DemoScript"]:::comp
+    WEB["«componente»<br/>API REST + Front-end web<br/>(HttpServer do JDK, JSON estrito, CSP)"]:::comp
+  end
+
+  subgraph APP["Aplicação — regras de negócio e casos de uso"]
+    AUTH["«componente»<br/>Autenticação e Autorização<br/>(senha + MFA + RBAC)"]:::comp
+    ORD["«componente»<br/>Ordens<br/>(enviar, cancelar, consultar)"]:::comp
+    VAL["«componente»<br/>Validação e Risco<br/>(mercado, limites, preço)"]:::comp
+    MOT["«componente»<br/>Motor de Ordens (worker)<br/>(fila, envio, liquidação)"]:::comp
+    CAR["«componente»<br/>Carteira e Cotações"]:::comp
+    ADM["«componente»<br/>Administração e Risco"]:::comp
+    AUD["«componente»<br/>Auditoria<br/>(hash encadeado)"]:::comp
+    NOT["«componente»<br/>Notificações<br/>(outbox)"]:::comp
+  end
+
+  subgraph PORTAS["Portas (interfaces)"]
+    PR["Repositorios"]:::port
+    PTX["GerenciadorTransacao"]:::port
+    PQ["FilaOrdens"]:::port
+    PCG["CorretoraGateway"]:::port
+    PPC["ProvedorCotacoes"]:::port
+    PEN["EnviadorNotificacao"]:::port
+    PSEC["HasherSenha · ServicoMfa<br/>(segredo MFA cifrado)"]:::port
+  end
+
+  subgraph INFRA["Infraestrutura (adaptadores)"]
+    JDBC["«componente»<br/>Persistência JDBC<br/>(consultas parametrizadas,<br/>concorrência otimista)"]:::comp
+    MEM["«componente»<br/>Persistência em memória<br/>(testes e demo)"]:::comp
+    RES["«componente»<br/>Resiliência<br/>(timeout + circuit breaker)"]:::comp
+    SEC["«componente»<br/>PBKDF2 + TOTP +<br/>AES-256-GCM (segredo MFA)"]:::comp
+    SIMN["«componente»<br/>Notificação simulada"]:::comp
+  end
+
+  subgraph EXT["Sistemas externos (simulados)"]
+    BOL["Corretora/Bolsa Simulada"]:::ext
+    COT["Provedor de Cotações"]:::ext
+  end
+
+  DB[("PostgreSQL<br/>schema.sql")]:::db
+
+  CLI --> AUTH
+  CLI --> ORD
+  CLI --> CAR
+  CLI --> ADM
+  WEB --> AUTH
+  WEB --> ORD
+  WEB --> CAR
+  WEB --> ADM
+  ORD --> AUTH
+  ORD --> VAL
+  ORD --> MOT
+  ORD --> AUD
+  ORD --> NOT
+  MOT --> AUD
+  MOT --> NOT
+  VAL --> CAR
+  CAR --> AUTH
+  ADM --> AUTH
+  ADM --> AUD
+  AUTH --> AUD
+
+  AUTH -.-> PSEC
+  ORD -.-> PR
+  ORD -.-> PTX
+  ORD -.-> PQ
+  MOT -.-> PQ
+  MOT -.-> PCG
+  MOT -.-> PR
+  CAR -.-> PPC
+  AUD -.-> PR
+  NOT -.-> PEN
+
+  PR -.-> JDBC
+  PR -.-> MEM
+  PTX -.-> JDBC
+  PQ -.-> JDBC
+  PSEC -.-> SEC
+  PEN -.-> SIMN
+  PCG -.-> RES
+  RES --> BOL
+  PPC -.-> COT
+  JDBC --> DB

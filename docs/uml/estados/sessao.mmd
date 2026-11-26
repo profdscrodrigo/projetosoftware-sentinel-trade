@@ -1,0 +1,8 @@
+stateDiagram-v2
+  [*] --> PENDENTE_MFA : senha correta
+  PENDENTE_MFA --> ATIVA : código TOTP correto (token novo; pendência consumida)
+  PENDENTE_MFA --> REVOGADA : 3 códigos errados
+  PENDENTE_MFA --> REVOGADA : expirou (5 min)
+  ATIVA --> REVOGADA : logout
+  ATIVA --> REVOGADA : expirou (15 min)
+  REVOGADA --> [*]

@@ -1,0 +1,11 @@
+stateDiagram-v2
+  [*] --> FECHADO
+  FECHADO --> FECHADO : sucesso (zera falhas)
+  FECHADO --> ABERTO : N falhas seguidas (padrão 5)
+  ABERTO --> MEIO_ABERTO : passou o tempo de espera (padrão 30 s)
+  MEIO_ABERTO --> FECHADO : chamada de prova com sucesso
+  MEIO_ABERTO --> ABERTO : chamada de prova falhou
+  note right of ABERTO
+    Falha rápido, sem chamar a corretora.
+    As ordens continuam na fila durável.
+  end note

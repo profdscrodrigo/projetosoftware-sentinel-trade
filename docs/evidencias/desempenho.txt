@@ -1,0 +1,12 @@
+SentinelTrade — registro de desempenho
+
+Registramos os resultados abaixo em um ensaio do núcleo do sistema, usando dados em memória e JDK 21 em contêiner Linux.
+O ensaio não inclui latência de PostgreSQL, rede ou corretora. Os valores variam entre execuções e servem para avaliar a
+ordem de grandeza do RNF05; não os usamos como SLA de produção. O registro original não identifica CPU e memória do host,
+por isso não fazemos comparação entre máquinas a partir destes números.
+------------------------------------------------------------------------
+login completo (PBKDF2 600.000 it.): 224 ms
+consultarCarteira   p50=0.009 ms  p95=0.026 ms  p99=0.091 ms (n=2000)
+listar cotações     p50=0.007 ms  p95=0.011 ms  p99=0.038 ms
+enviarOrdem (valida+reserva+audita)  p50=0.094 ms  p95=0.794 ms  p99=8.312 ms
+auditoria íntegra após 1+ eventos: Verificacao[integra=true, seqProblema=0, motivo=Cadeia íntegra (6009 eventos)]

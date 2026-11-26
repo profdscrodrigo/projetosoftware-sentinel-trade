@@ -1,0 +1,33 @@
+sequenceDiagram
+  autonumber
+  actor U as Usuário
+  participant UI as Interface (CLI)
+  participant AUT as AutenticacaoService
+  participant H as Pbkdf2Hasher
+  participant M as TotpMfa
+  participant DB as Repositórios
+  participant AUD as AuditoriaService
+  U->>UI: e-mail e senha
+  UI->>AUT: iniciarLogin(email, senha)
+  AUT->>AUT: limitador de taxa
+  AUT->>DB: buscarPorEmail
+  AUT->>H: verifica(senha, hash)
+  alt credenciais inválidas ou conta bloqueada
+    AUT->>DB: atualizar falhas / bloqueio
+    AUT->>AUD: registrar(LOGIN_FALHA ou LOGIN_BLOQUEADO)
+    AUT-->>UI: AutenticacaoException (mensagem única)
+  else credenciais válidas
+    AUT->>DB: salvar Sessao PENDENTE_MFA (hash do token)
+    AUT-->>UI: token pendente
+    U->>UI: código de 6 dígitos
+    UI->>AUT: confirmarMfa(tokenPendente, codigo)
+    AUT->>M: verificar(segredo, codigo, agora)
+    alt código incorreto
+      AUT->>AUD: registrar(MFA_FALHA)
+      AUT-->>UI: AutenticacaoException
+    else código correto
+      AUT->>DB: revogar pendente + salvar Sessao ATIVA (novo token)
+      AUT->>AUD: registrar(LOGIN_SUCESSO)
+      AUT-->>UI: token de sessão
+    end
+  end

@@ -1,0 +1,31 @@
+flowchart TD
+  classDef dec fill:#FFF7E6,stroke:#B07A00
+  classDef fim fill:#FDECEC,stroke:#A33
+  classDef ok fill:#EAF7EA,stroke:#2E7D32
+  classDef ext fill:#EEE,stroke:#666,stroke-dasharray:4
+
+  I0((" ")) --> I1["Investidor informa lado, ativo,<br/>quantidade, preço e chave de idempotência"]
+  I1 --> S1["Valida sessão e perfil INVESTIDOR"]
+  S1 --> S1b["Limita a frequência de envio"]
+  S1b --> S2["Valida a entrada por allowlist<br/>(ticker, quantidade, preço, chave)"]
+  S2 --> S2d{"Entrada válida?"}:::dec
+  S2d -- não --> F1["Recusa: erro de validação<br/>(nada é criado)"]:::fim
+  S2d -- sim --> S3{"Chave de idempotência<br/>já existe?"}:::dec
+  S3 -- sim --> S3b{"Mesmo conteúdo?"}:::dec
+  S3b -- sim --> R1["Devolve a ordem existente<br/>(sem criar outra)"]:::ok
+  S3b -- não --> F2["Recusa: conflito de chave"]:::fim
+  S3 -- não --> S4{"Valor acima do limite de confirmação<br/>e dentro do máximo por ordem?"}:::dec
+  S4 -- sim --> I9{"Investidor confirma<br/>a operação de alto valor?"}:::dec
+  I9 -- não --> F3["Nada é criado"]:::fim
+  I9 -- sim --> S5
+  S4 -- não --> S5["Valida mercado, FORA da transação:<br/>ativo ativo, mercado aberto,<br/>cotação recente, preço na faixa"]
+  S5 -.-> P1["Provedor de Cotações<br/>(dado externo, revalidado)"]:::ext
+  S5 --> S6["Abre a transação:<br/>cria a ordem CRIADA + auditoria"]
+  S6 --> S7["Valida o risco:<br/>limite por ordem e limite diário"]
+  S7 --> S8["Reserva saldo (compra)<br/>ou quantidade (venda)"]
+  S8 --> S8d{"Alguma regra falhou?"}:::dec
+  S8d -- sim --> X1["REJEITADA com o motivo<br/>+ auditoria + notificação"]:::fim
+  S8d -- não --> X2["VALIDADA + enfileira na fila durável<br/>+ auditoria"]:::ok
+  X1 --> C1["Confirma a transação:<br/>tudo ou nada"]
+  X2 --> C1
+  C1 --> E0((" "))

@@ -1,0 +1,27 @@
+flowchart TD
+  classDef dec fill:#FFF7E6,stroke:#B07A00
+  classDef fim fill:#FDECEC,stroke:#A33
+  classDef ok fill:#EAF7EA,stroke:#2E7D32
+
+  A0((" ")) --> A1["Investidor informa o id da ordem, a nova quantidade,<br/>o novo preço (opcional) e uma NOVA chave de idempotência"]
+  A1 --> A2["Valida sessão, perfil e entradas"]
+  A2 --> A3{"A nova chave já<br/>gerou uma ordem?"}:::dec
+  A3 -- "sim, substituta desta ordem" --> R1["Devolve a substituta (idempotente)"]:::ok
+  A3 -- "sim, de outra ordem" --> F0["Recusa: conflito de chave"]:::fim
+  A3 -- não --> A4{"Ordem do investidor, VALIDADA ou ENVIADA,<br/>sem nenhuma execução?"}:::dec
+  A4 -- não --> F1["Recusa: ORDEM_NAO_ALTERAVEL"]:::fim
+  A4 -- sim --> A5["Ordem a mercado: recalcula o preço de proteção.<br/>Ordem a limite: usa o preço informado (vazio = mantém)"]
+  A5 --> A6{"Valor acima do limite<br/>de confirmação?"}:::dec
+  A6 -- "sim, sem confirmar" --> F2["Pede confirmação; nada muda"]:::fim
+  A6 -- "não, ou confirmado" --> A7["Pré-validações SEM efeito colateral: mercado, faixa de preço,<br/>limites, saldo ou posição (contando a reserva que será devolvida)"]
+  A7 --> A7d{"Alguma regra falhou?"}:::dec
+  A7d -- sim --> F3["Recusa: a ordem ORIGINAL permanece intacta"]:::fim
+  A7d -- não --> A8{"A ordem já está<br/>na corretora?"}:::dec
+  A8 -- sim --> A9["Cancela na corretora e aplica<br/>as execuções em trânsito"]
+  A9 --> A9d{"Resultado?"}:::dec
+  A9d -- "corretora indisponível" --> F4["Erro controlado: ordem NÃO alterada"]:::fim
+  A9d -- "já executada" --> F1
+  A9d -- "cancelada" --> A10
+  A8 -- não --> A10["Abre a transação"]
+  A10 --> A11["Cancela a original (devolve a reserva) e cria a NOVA ordem,<br/>ligada a ela: validação de risco, reserva, fila e auditoria"]
+  A11 --> A12["Auditoria ORDEM_ALTERADA + notificação:<br/>tudo confirma junto"]:::ok
