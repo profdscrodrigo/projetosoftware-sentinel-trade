@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<!-- Pedaços reaproveitados em todas as telas: cabeçalho <head>, topo com menu, mensagens e rodapé -->
+
+<head th:fragment="head(titulo)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${titulo} + ' · SentinelTrade'">SentinelTrade</title>
+    <link rel="stylesheet" th:href="@{/css/estilo.css}" href="../static/css/estilo.css">
+</head>
+
+<body>
+
+<header th:fragment="topo" class="topo">
+    <div class="topo-conteudo">
+        <a class="marca" th:href="@{/}" href="#">
+            <span class="marca-icone" aria-hidden="true">◆</span>
+            <span>SentinelTrade</span>
+            <span class="marca-tag">ambiente simulado</span>
+        </a>
+
+        <nav class="menu" th:if="${usuarioLogado != null}" aria-label="Menu principal">
+            <th:block th:if="${usuarioLogado.perfil.name() == 'INVESTIDOR'}">
+                <a th:href="@{/investidor}" href="#">Painel</a>
+                <a th:href="@{/investidor/ordens/nova}" href="#">Nova ordem</a>
+                <a th:href="@{/investidor/ordens}" href="#">Minhas ordens</a>
+            </th:block>
+            <th:block th:if="${usuarioLogado.perfil.name() == 'ADMINISTRADOR'}">
+                <a th:href="@{/admin}" href="#">Mercado</a>
+                <a th:href="@{/admin/auditoria}" href="#">Auditoria</a>
+            </th:block>
+            <th:block th:if="${usuarioLogado.perfil.name() == 'ANALISTA_RISCO'}">
+                <a th:href="@{/risco}" href="#">Painel de risco</a>
+            </th:block>
+        </nav>
+
+        <div class="usuario" th:if="${usuarioLogado != null}">
+            <div class="usuario-dados">
+                <strong th:text="${usuarioLogado.nome}">Investidor Exemplo A</strong>
+                <span th:text="${usuarioLogado.perfil.descricao}">Investidor</span>
+            </div>
+            <form th:action="@{/logout}" method="post">
+                <button type="submit" class="botao botao-topo">Sair</button>
+            </form>
+        </div>
+    </div>
+</header>
+
+<div th:fragment="mensagens" class="mensagens">
+    <div class="alerta alerta-sucesso" th:if="${sucesso != null}" th:text="${sucesso}">Ordem executada com sucesso!</div>
+    <div class="alerta alerta-info" th:if="${info != null}" th:text="${info}">Informação.</div>
+    <div class="alerta alerta-aviso" th:if="${aviso != null}" th:text="${aviso}">Aviso.</div>
+    <div class="alerta alerta-erro" th:if="${erro != null}" th:text="${erro}">Erro.</div>
+    <ul class="alerta alerta-erro lista-erros" th:if="${erros != null}">
+        <li th:each="mensagem : ${erros}" th:text="${mensagem}">Mensagem de validação.</li>
+    </ul>
+</div>
+
+<footer th:fragment="rodape" class="rodape">
+    Projeto acadêmico · Universidade Presbiteriana Mackenzie · Todos os dados e operações são <strong>fictícios</strong>.
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragmentos :: head('Erro')}">
+    <link rel="stylesheet" href="../static/css/estilo.css">
+</head>
+<body>
+<header th:replace="~{fragmentos :: topo}"></header>
+<main class="conteudo">
+    <section class="cartao cartao-centro">
+        <div class="icone-grande" aria-hidden="true">⚠️</div>
+        <h1 th:text="${titulo ?: 'Algo deu errado'}">Algo deu errado</h1>
+        <p th:text="${mensagem ?: 'Não foi possível concluir a operação.'}">Não foi possível concluir a operação.</p>
+        <p class="texto-suave" th:if="${codigo != null}">Código do erro: <code th:text="${codigo}">a1b2c3d4</code></p>
+        <a class="botao botao-principal" th:href="@{/}" href="#">Voltar ao início</a>
+    </section>
+</main>
+<footer th:replace="~{fragmentos :: rodape}"></footer>
+</body>
+</html>

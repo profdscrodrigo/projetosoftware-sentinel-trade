@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragmentos :: head('Entrar')}">
+    <link rel="stylesheet" href="../static/css/estilo.css">
+</head>
+<body class="pagina-acesso">
+
+<main class="acesso">
+    <section class="acesso-apresentacao">
+        <div class="marca marca-grande"><span class="marca-icone">◆</span> SentinelTrade</div>
+        <p class="acesso-slogan">Negociação de ativos com segurança, rastreabilidade e sem ordens duplicadas.</p>
+        <ul class="acesso-lista">
+            <li>Login com senha + código de acesso (MFA)</li>
+            <li>Ordens validadas por saldo, carteira e limites de risco</li>
+            <li>Tudo registrado em auditoria</li>
+        </ul>
+        <p class="acesso-aviso">Ambiente 100% simulado: nenhum dinheiro ou bolsa real.</p>
+    </section>
+
+    <section class="cartao acesso-cartao">
+        <h1>Entrar</h1>
+        <p class="texto-suave">Etapa 1 de 2 · e-mail e senha</p>
+
+        <div class="alerta alerta-info" th:if="${param.saiu}">Você saiu do sistema.</div>
+        <div th:replace="~{fragmentos :: mensagens}"></div>
+
+        <form th:action="@{/login}" th:object="${loginForm}" method="post" class="formulario" autocomplete="off">
+            <label for="email">E-mail</label>
+            <input id="email" name="email" type="email" maxlength="120" required
+                   th:value="*{email}" placeholder="voce@email.exemplo">
+
+            <label for="senha">Senha</label>
+            <input id="senha" name="senha" type="password" maxlength="72" required placeholder="Sua senha">
+
+            <button type="submit" class="botao botao-principal botao-largo">Continuar</button>
+        </form>
+
+        <details class="demonstracao">
+            <summary>Usuários de demonstração (fictícios)</summary>
+            <table class="tabela tabela-compacta">
+                <tr><td>Investidor</td><td>investidor.a@email.exemplo</td></tr>
+                <tr><td>Investidor</td><td>investidor.b@email.exemplo</td></tr>
+                <tr><td>Administrador</td><td>admin@orioncapital.exemplo</td></tr>
+                <tr><td>Analista de risco</td><td>risco@orioncapital.exemplo</td></tr>
+            </table>
+            <p>Senha de todos: <code>Demo@1234</code></p>
+        </details>
+    </section>
+</main>
+
+</body>
+</html>

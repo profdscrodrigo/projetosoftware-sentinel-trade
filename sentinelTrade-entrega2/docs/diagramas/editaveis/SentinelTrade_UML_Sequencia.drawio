@@ -1,0 +1,118 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/24.7.17 Chrome/128.0.6613.36 Electron/32.0.1 Safari/537.36" version="24.7.17">
+  <diagram id="d1" name="UML Sequencia - Comprar ativo">
+    <mxGraphModel dx="-679" dy="-238" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="0" page="0" pageScale="1" pageWidth="1300" pageHeight="890" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="c3" value="&lt;b style=&#39;font-size:20px&#39;&gt;SentinelTrade — Diagrama de Sequência&lt;/b&gt;&lt;br&gt;&lt;span style=&#39;font-size:13px;color:#555&#39;&gt;Operação: &lt;b&gt;investidor compra um ativo&lt;/b&gt; (casos de uso UC03, UC04, UC06 e UC09)&lt;/span&gt;" style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;fontFamily=Helvetica;" parent="1" vertex="1">
+          <mxGeometry x="30" y="10" width="1100" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="c4" value="&lt;b&gt;Investidor&lt;/b&gt;" style="shape=umlLifeline;participant=umlActor;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;verticalAlign=bottom;labelPosition=center;verticalLabelPosition=top;align=center;outlineConnect=0;size=55;fontSize=14;fontFamily=Helvetica;" parent="1" vertex="1">
+          <mxGeometry x="95" y="130" width="30" height="690" as="geometry" />
+        </mxCell>
+        <mxCell id="c5" value="&lt;b&gt;Site SentinelTrade&lt;/b&gt;" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;outlineConnect=0;size=55;fillColor=#eeeeee;strokeColor=#666666;fontSize=13;fontFamily=Helvetica;" parent="1" vertex="1">
+          <mxGeometry x="290" y="110" width="180" height="710" as="geometry" />
+        </mxCell>
+        <mxCell id="c6" value="&lt;b&gt;Sistema SentinelTrade&lt;br&gt;(servidor)&lt;/b&gt;" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;outlineConnect=0;size=55;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=13;fontFamily=Helvetica;" parent="1" vertex="1">
+          <mxGeometry x="560" y="110" width="180" height="710" as="geometry" />
+        </mxCell>
+        <mxCell id="c7" value="&lt;b&gt;Banco de Dados&lt;/b&gt;" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;outlineConnect=0;size=55;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=13;fontFamily=Helvetica;" parent="1" vertex="1">
+          <mxGeometry x="830" y="110" width="180" height="710" as="geometry" />
+        </mxCell>
+        <mxCell id="c8" value="&lt;b&gt;Bolsa Simulada&lt;/b&gt;" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;outlineConnect=0;size=55;fillColor=#f8cecc;strokeColor=#b85450;fontSize=13;fontFamily=Helvetica;" parent="1" vertex="1">
+          <mxGeometry x="1100" y="110" width="180" height="710" as="geometry" />
+        </mxCell>
+        <mxCell id="c9" value="1. preenche a ordem de compra" style="html=1;verticalAlign=bottom;endArrow=block;endFill=1;fontSize=13;labelBackgroundColor=#ffffff;strokeWidth=1.5;fontFamily=Helvetica;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="110" y="215" as="sourcePoint" />
+            <mxPoint x="380" y="215" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c10" value="2. envia a ordem" style="html=1;verticalAlign=bottom;endArrow=block;endFill=1;fontSize=13;labelBackgroundColor=#ffffff;strokeWidth=1.5;fontFamily=Helvetica;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="380" y="265" as="sourcePoint" />
+            <mxPoint x="650" y="265" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c11" value="3. busca saldo, limite e ordens já feitas" style="html=1;verticalAlign=bottom;endArrow=block;endFill=1;fontSize=13;labelBackgroundColor=#ffffff;strokeWidth=1.5;fontFamily=Helvetica;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="650" y="315" as="sourcePoint" />
+            <mxPoint x="920" y="315" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c12" value="4. dados da conta" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=9;fontSize=13;labelBackgroundColor=#ffffff;strokeWidth=1.5;fontFamily=Helvetica;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="920" y="365" as="sourcePoint" />
+            <mxPoint x="650" y="365" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c13" value="&lt;b&gt;alt&lt;/b&gt;" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;width=50;height=24;fillColor=none;strokeColor=#555555;fontSize=13;fontFamily=Helvetica;" parent="1" vertex="1">
+          <mxGeometry x="40" y="395" width="1220" height="400" as="geometry" />
+        </mxCell>
+        <mxCell id="c14" value="&lt;i&gt;[ordem aprovada: tem saldo, está dentro do limite e não é repetida]&lt;/i&gt;" style="text;html=1;align=left;fontSize=12;fontColor=#2e5a1f;fontFamily=Helvetica;" parent="1" vertex="1">
+          <mxGeometry x="100" y="397" width="600" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="c15" value="5. envia a ordem para a Bolsa" style="html=1;verticalAlign=bottom;endArrow=block;endFill=1;fontSize=13;labelBackgroundColor=#ffffff;strokeWidth=1.5;fontFamily=Helvetica;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="650" y="450" as="sourcePoint" />
+            <mxPoint x="1190" y="450" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c16" value="6. ordem executada" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=9;fontSize=13;labelBackgroundColor=#ffffff;strokeWidth=1.5;fontFamily=Helvetica;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1190" y="490" as="sourcePoint" />
+            <mxPoint x="650" y="490" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c17" value="7. salva a ordem e o registro de auditoria" style="html=1;verticalAlign=bottom;endArrow=block;endFill=1;fontSize=13;labelBackgroundColor=#ffffff;strokeWidth=1.5;fontFamily=Helvetica;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="650" y="530" as="sourcePoint" />
+            <mxPoint x="920" y="530" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c18" value="8. ordem executada" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=9;fontSize=13;labelBackgroundColor=#ffffff;strokeWidth=1.5;fontFamily=Helvetica;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="650" y="570" as="sourcePoint" />
+            <mxPoint x="380" y="570" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c19" value="9. mostra &quot;Ordem executada&quot;" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=9;fontSize=13;labelBackgroundColor=#ffffff;strokeWidth=1.5;fontFamily=Helvetica;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="380" y="610" as="sourcePoint" />
+            <mxPoint x="110" y="610" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c20" value="" style="endArrow=none;dashed=1;html=1;strokeColor=#555555;dashPattern=8 4;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="40" y="632" as="sourcePoint" />
+            <mxPoint x="1260" y="632" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c21" value="&lt;i&gt;[ordem recusada: sem saldo, acima do limite ou repetida]&lt;/i&gt;" style="text;html=1;align=left;fontSize=12;fontColor=#9a2a26;fontFamily=Helvetica;" parent="1" vertex="1">
+          <mxGeometry x="50" y="634" width="600" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="c22" value="10. salva a tentativa no registro de auditoria" style="html=1;verticalAlign=bottom;endArrow=block;endFill=1;fontSize=13;labelBackgroundColor=#ffffff;strokeWidth=1.5;fontFamily=Helvetica;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="650" y="690" as="sourcePoint" />
+            <mxPoint x="920" y="690" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c23" value="11. ordem recusada + motivo" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=9;fontSize=13;labelBackgroundColor=#ffffff;strokeWidth=1.5;fontFamily=Helvetica;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="650" y="730" as="sourcePoint" />
+            <mxPoint x="380" y="730" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c24" value="12. mostra o motivo da recusa" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=9;fontSize=13;labelBackgroundColor=#ffffff;strokeWidth=1.5;fontFamily=Helvetica;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="380" y="770" as="sourcePoint" />
+            <mxPoint x="110" y="770" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c25" value="&lt;b&gt;Como ler:&lt;/b&gt; cada coluna é um participante; o tempo corre de cima para baixo. &lt;b&gt;Seta cheia&lt;/b&gt; = pedido · &lt;b&gt;seta tracejada&lt;/b&gt; = resposta · &lt;b&gt;alt&lt;/b&gt; = acontece um caso &lt;u&gt;ou&lt;/u&gt; o outro." style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;fontSize=12;fontFamily=Helvetica;" parent="1" vertex="1">
+          <mxGeometry x="30" y="835" width="1240" height="40" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragmentos :: head('Minhas ordens')}">
+    <link rel="stylesheet" href="../../static/css/estilo.css">
+</head>
+<body>
+<header th:replace="~{fragmentos :: topo}"></header>
+
+<main class="conteudo">
+    <div class="titulo-pagina">
+        <div>
+            <h1>Minhas ordens</h1>
+            <p class="texto-suave">Acompanhe o status de cada ordem, altere o preço ou cancele as que ainda aguardam.</p>
+        </div>
+        <a class="botao botao-principal" th:href="@{/investidor/ordens/nova}" href="nova-ordem.html">+ Nova ordem</a>
+    </div>
+
+    <div th:replace="~{fragmentos :: mensagens}"></div>
+
+    <!-- Filtro por status (os valores aceitos são uma lista fechada) -->
+    <nav class="filtros" aria-label="Filtrar por status">
+        <a th:href="@{/investidor/ordens}" th:classappend="${filtro == 'TODAS'} ? 'ativo'" href="#">Todas</a>
+        <a th:href="@{/investidor/ordens(status='ENVIADA')}" th:classappend="${filtro == 'ENVIADA'} ? 'ativo'" href="#">Aguardando</a>
+        <a th:href="@{/investidor/ordens(status='EXECUTADA')}" th:classappend="${filtro == 'EXECUTADA'} ? 'ativo'" href="#">Executadas</a>
+        <a th:href="@{/investidor/ordens(status='REJEITADA')}" th:classappend="${filtro == 'REJEITADA'} ? 'ativo'" href="#">Rejeitadas</a>
+        <a th:href="@{/investidor/ordens(status='CANCELADA')}" th:classappend="${filtro == 'CANCELADA'} ? 'ativo'" href="#">Canceladas</a>
+        <a th:href="@{/investidor/ordens(status='FALHA')}" th:classappend="${filtro == 'FALHA'} ? 'ativo'" href="#">Falha</a>
+    </nav>
+
+    <section class="cartao">
+        <p class="texto-suave" th:if="${#lists.isEmpty(ordens)}">Nenhuma ordem encontrada.</p>
+        <div class="tabela-rolagem" th:unless="${#lists.isEmpty(ordens)}">
+            <table class="tabela">
+                <thead>
+                <tr>
+                    <th>Data</th><th>Ativo</th><th>Tipo</th><th class="num">Qtd.</th>
+                    <th class="num">Preço</th><th class="num">Total</th><th>Status</th><th>Ações</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="o : ${ordens}">
+                    <td th:text="${o.criadoEm}">05/11/2026 10:20</td>
+                    <td><strong th:text="${o.codigoAtivo}">ORCP3</strong></td>
+                    <td><span class="tipo" th:classappend="${o.tipo.name() == 'COMPRA'} ? 'tipo-compra' : 'tipo-venda'"
+                              th:text="${o.tipo}">COMPRA</span></td>
+                    <td class="num" th:text="${o.quantidade}">10</td>
+                    <td class="num" th:text="${@fmt.dinheiro(o.preco)}">R$ 25,40</td>
+                    <td class="num" th:text="${@fmt.dinheiro(o.valorTotal)}">R$ 254,00</td>
+                    <td>
+                        <span class="status" th:classappend="'status-' + ${o.status.name().toLowerCase()}"
+                              th:text="${o.status.descricao}">Executada</span>
+                        <div class="motivo" th:if="${o.motivo != null}" th:text="${o.motivo}">Motivo</div>
+                        <details class="historico" th:if="${historicos[o.id] != null}">
+                            <summary>Histórico</summary>
+                            <ol>
+                                <li th:each="h : ${historicos[o.id]}">
+                                    <span th:text="${h.statusNovo}">CRIADA</span>
+                                    <small th:text="${h.dataHora}">05/11/2026 10:20:01</small>
+                                </li>
+                            </ol>
+                        </details>
+                    </td>
+                    <td class="acoes">
+                        <form th:if="${o.precoAlteravel}" th:action="@{/investidor/ordens/{id}/preco(id=${o.id})}"
+                              method="post" class="form-inline">
+                            <input name="preco" type="number" min="0.01" max="1000000" step="0.01" required
+                                   th:value="${o.preco}" aria-label="Novo preço">
+                            <button type="submit" class="botao botao-pequeno">Alterar preço</button>
+                        </form>
+                        <form th:if="${o.cancelavel}" th:action="@{/investidor/ordens/{id}/cancelar(id=${o.id})}" method="post">
+                            <button type="submit" class="botao botao-pequeno botao-perigo">Cancelar</button>
+                        </form>
+                        <span class="texto-suave" th:if="${o.status.isFinal()}">—</span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</main>
+
+<footer th:replace="~{fragmentos :: rodape}"></footer>
+</body>
+</html>

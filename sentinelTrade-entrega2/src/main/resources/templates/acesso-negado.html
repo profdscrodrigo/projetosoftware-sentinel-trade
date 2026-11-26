@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragmentos :: head('Acesso negado')}">
+    <link rel="stylesheet" href="../static/css/estilo.css">
+</head>
+<body>
+<header th:replace="~{fragmentos :: topo}"></header>
+<main class="conteudo">
+    <section class="cartao cartao-centro">
+        <div class="icone-grande" aria-hidden="true">🔒</div>
+        <h1>Acesso negado</h1>
+        <p>Seu perfil não tem permissão para abrir esta página (princípio do menor privilégio).</p>
+        <a class="botao botao-principal" th:href="@{/}" href="#">Voltar para a minha área</a>
+    </section>
+</main>
+<footer th:replace="~{fragmentos :: rodape}"></footer>
+</body>
+</html>

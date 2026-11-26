@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragmentos :: head('Painel de risco')}">
+    <link rel="stylesheet" href="../../static/css/estilo.css">
+</head>
+<body>
+<header th:replace="~{fragmentos :: topo}"></header>
+
+<main class="conteudo">
+    <div class="titulo-pagina">
+        <div>
+            <h1>Painel de risco</h1>
+            <p class="texto-suave">Acompanhe ordens rejeitadas e ajuste os limites de cada conta.</p>
+        </div>
+    </div>
+
+    <div th:replace="~{fragmentos :: mensagens}"></div>
+
+    <section class="cartao">
+        <h2>Limites por conta</h2>
+        <p class="texto-suave">Regra: alto risco ≤ limite por ordem ≤ limite diário.</p>
+        <div class="tabela-rolagem">
+            <table class="tabela">
+                <thead>
+                <tr><th>Conta</th><th class="num">Saldo</th><th>Limite por ordem · diário · alto risco (R$)</th></tr>
+                </thead>
+                <tbody>
+                <tr th:each="c : ${contas}">
+                    <td><strong th:text="${c.numero}">OC-0001</strong>
+                        <div class="texto-suave" th:text="${c.investidor}">Investidor Exemplo A</div></td>
+                    <td class="num" th:text="${@fmt.dinheiro(c.saldo)}">R$ 10.000,00</td>
+                    <td>
+                        <form th:action="@{/risco/contas/{id}/limites(id=${c.contaId})}" method="post" class="form-inline">
+                            <input name="porOrdem" type="number" min="1" step="0.01" required th:value="${c.limite.porOrdem}" aria-label="Limite por ordem" value="5000.00">
+                            <input name="diario" type="number" min="1" step="0.01" required th:value="${c.limite.diario}" aria-label="Limite diário" value="20000.00">
+                            <input name="altoRisco" type="number" min="1" step="0.01" required th:value="${c.limite.altoRisco}" aria-label="Limite de alto risco" value="3000.00">
+                            <button type="submit" class="botao botao-pequeno">Salvar</button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="cartao">
+        <h2>Ordens rejeitadas</h2>
+        <p class="texto-suave" th:if="${#lists.isEmpty(rejeitadas)}">Nenhuma ordem rejeitada.</p>
+        <div class="tabela-rolagem" th:unless="${#lists.isEmpty(rejeitadas)}">
+            <table class="tabela">
+                <thead>
+                <tr><th>Data</th><th>Conta</th><th>Ativo</th><th>Tipo</th><th class="num">Valor</th><th>Motivo</th></tr>
+                </thead>
+                <tbody>
+                <tr th:each="r : ${rejeitadas}">
+                    <td th:text="${r.dataHora}">05/11/2026 10:20</td>
+                    <td><span th:text="${r.conta}">OC-0002</span>
+                        <div class="texto-suave" th:text="${r.investidor}">Investidor Exemplo B</div></td>
+                    <td th:text="${r.codigoAtivo}">STNL4</td>
+                    <td th:text="${r.tipo}">VENDA</td>
+                    <td class="num" th:text="${@fmt.dinheiro(r.valorTotal)}">R$ 255,00</td>
+                    <td class="motivo" th:text="${r.motivo}">Mercado fechado no momento.</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</main>
+
+<footer th:replace="~{fragmentos :: rodape}"></footer>
+</body>
+</html>

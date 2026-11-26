@@ -1,0 +1,11 @@
+# Dependabot: abre pedidos de atualização quando sai versão nova (e mais segura) das bibliotecas.
+version: 2
+updates:
+  - package-ecosystem: "maven"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "monthly"
