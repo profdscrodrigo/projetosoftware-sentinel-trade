@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragmentos :: head('Código de acesso')}">
+    <link rel="stylesheet" href="../static/css/estilo.css">
+</head>
+<body class="pagina-acesso">
+
+<main class="acesso">
+    <section class="cartao acesso-cartao">
+        <h1>Código de acesso</h1>
+        <p class="texto-suave">Etapa 2 de 2 · segundo fator (MFA)</p>
+
+        <div th:replace="~{fragmentos :: mensagens}"></div>
+
+        <p>Digite o código de 6 dígitos enviado para o seu celular.
+            Ele vale por 5 minutos. Tentativas restantes:
+            <strong th:text="${tentativasRestantes}">3</strong>.</p>
+
+        <form th:action="@{/mfa}" method="post" class="formulario" autocomplete="off">
+            <label for="codigo">Código</label>
+            <input id="codigo" name="codigo" class="campo-codigo" type="text" inputmode="numeric"
+                   pattern="[0-9]{6}" maxlength="6" required autocomplete="one-time-code" placeholder="000000">
+            <button type="submit" class="botao botao-principal botao-largo">Entrar</button>
+        </form>
+        <p class="texto-suave"><a th:href="@{/login}" href="login.html">Voltar ao login</a></p>
+    </section>
+
+    <section class="celular" aria-label="Celular simulado">
+        <div class="celular-tela">
+            <div class="celular-topo">Celular simulado</div>
+            <div class="celular-mensagem">
+                <span class="celular-remetente">SentinelTrade</span>
+                Seu código de acesso é
+                <strong class="celular-codigo" th:text="${codigoSimulado}">482913</strong>
+                <span class="celular-rodape">Não compartilhe este código.</span>
+            </div>
+        </div>
+        <p class="celular-legenda">Simulação: num sistema real o código chegaria por SMS ou app autenticador,
+            e nunca apareceria no site.</p>
+    </section>
+</main>
+
+</body>
+</html>

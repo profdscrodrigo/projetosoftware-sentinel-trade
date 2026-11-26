@@ -1,0 +1,220 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/24.7.17 Chrome/128.0.6613.36 Electron/32.0.1 Safari/537.36" version="24.7.17">
+  <diagram id="d1" name="UML Casos de Uso com Seguranca (UMLsec)">
+    <mxGraphModel dx="-859" dy="-291" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="0" page="0" pageScale="1" pageWidth="1680" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="c3" value="&lt;b style=&#39;font-size:20px&#39;&gt;SentinelTrade — Casos de Uso com Notação de Segurança (UMLsec)&lt;/b&gt;&lt;br&gt;&lt;span style=&#39;font-size:13px;color:#555&#39;&gt;Quem usa o sistema, para quê, e qual proteção de segurança vale em cada caso · cada nota diz onde isso está no código&lt;/span&gt;" style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;fontFamily=Helvetica;" parent="1" vertex="1">
+          <mxGeometry x="30" y="10" width="1500" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="c4" value="&lt;i&gt;«secure»&lt;/i&gt;&lt;br&gt;&lt;b&gt;Sistema SentinelTrade&lt;/b&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fcfcfc;strokeColor=#333333;strokeWidth=2;verticalAlign=top;fontSize=14;fontFamily=Helvetica;" parent="1" vertex="1">
+          <mxGeometry x="290" y="75" width="820" height="840" as="geometry" />
+        </mxCell>
+        <mxCell id="c5" value="Autenticar-se com MFA&lt;br&gt;&lt;i&gt;«secureAuthentication»&lt;/i&gt;" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;fontFamily=Helvetica;" parent="1" vertex="1">
+          <mxGeometry x="320" y="110" width="250" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="c6" value="Consultar carteira e cotações" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;fontFamily=Helvetica;" parent="1" vertex="1">
+          <mxGeometry x="320" y="200" width="250" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="c7" value="Enviar ordem de compra ou venda&lt;br&gt;&lt;i&gt;«integrity»&lt;/i&gt;" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;fontFamily=Helvetica;" parent="1" vertex="1">
+          <mxGeometry x="320" y="290" width="250" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="c8" value="Alterar preço ou cancelar ordem" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;fontFamily=Helvetica;" parent="1" vertex="1">
+          <mxGeometry x="320" y="380" width="250" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="c9" value="Recuperar ordens com falha&lt;br&gt;&lt;i&gt;«availability»&lt;/i&gt;" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;fontFamily=Helvetica;" parent="1" vertex="1">
+          <mxGeometry x="320" y="480" width="250" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="c10" value="Gerenciar ativos e cotações" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;fontFamily=Helvetica;" parent="1" vertex="1">
+          <mxGeometry x="320" y="570" width="250" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="c11" value="Consultar auditoria" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;fontFamily=Helvetica;" parent="1" vertex="1">
+          <mxGeometry x="320" y="660" width="250" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="c12" value="Ajustar limites de risco" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;fontFamily=Helvetica;" parent="1" vertex="1">
+          <mxGeometry x="320" y="770" width="250" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="c13" value="Proteger dados&lt;br&gt;&lt;i&gt;«secrecy»&lt;/i&gt;" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=12;fontFamily=Helvetica;" parent="1" vertex="1">
+          <mxGeometry x="820" y="110" width="260" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="c14" value="Validar e sanitizar entradas&lt;br&gt;&lt;i&gt;«inputValidation»&lt;/i&gt;" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=12;fontFamily=Helvetica;" parent="1" vertex="1">
+          <mxGeometry x="820" y="345" width="260" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="c15" value="Registrar auditoria&lt;br&gt;&lt;i&gt;«audit»&lt;/i&gt;" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=12;fontFamily=Helvetica;" parent="1" vertex="1">
+          <mxGeometry x="820" y="475" width="260" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="c16" value="Autorizar por perfil&lt;br&gt;&lt;i&gt;«leastPrivilege»&lt;/i&gt;" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=12;fontFamily=Helvetica;" parent="1" vertex="1">
+          <mxGeometry x="820" y="700" width="260" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="c17" value="Investidor" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fontSize=13;fontStyle=1;fontFamily=Helvetica;" parent="1" vertex="1">
+          <mxGeometry x="120" y="240" width="36" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="c18" value="Administrador" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fontSize=13;fontStyle=1;fontFamily=Helvetica;" parent="1" vertex="1">
+          <mxGeometry x="120" y="560" width="36" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="c19" value="Analista de Risco" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fontSize=13;fontStyle=1;fontFamily=Helvetica;" parent="1" vertex="1">
+          <mxGeometry x="120" y="790" width="36" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="c20" value="Corretora/Bolsa&lt;br&gt;Simulada" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fontSize=13;fontStyle=1;fontFamily=Helvetica;" parent="1" vertex="1">
+          <mxGeometry x="1150" y="285" width="36" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="c21" value="" style="endArrow=none;html=1;strokeColor=#333333;fontFamily=Helvetica;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="138" y="271.5" as="sourcePoint" />
+            <mxPoint x="320" y="140" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c22" value="" style="endArrow=none;html=1;strokeColor=#333333;fontFamily=Helvetica;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="138" y="271.5" as="sourcePoint" />
+            <mxPoint x="320" y="230" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c23" value="" style="endArrow=none;html=1;strokeColor=#333333;fontFamily=Helvetica;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="138" y="271.5" as="sourcePoint" />
+            <mxPoint x="320" y="320" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c24" value="" style="endArrow=none;html=1;strokeColor=#333333;fontFamily=Helvetica;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="138" y="271.5" as="sourcePoint" />
+            <mxPoint x="320" y="410" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c25" value="" style="endArrow=none;html=1;strokeColor=#333333;fontFamily=Helvetica;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="138" y="591.5" as="sourcePoint" />
+            <mxPoint x="320" y="140" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c26" value="" style="endArrow=none;html=1;strokeColor=#333333;fontFamily=Helvetica;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="138" y="591.5" as="sourcePoint" />
+            <mxPoint x="320" y="510" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c27" value="" style="endArrow=none;html=1;strokeColor=#333333;fontFamily=Helvetica;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="138" y="591.5" as="sourcePoint" />
+            <mxPoint x="320" y="600" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c28" value="" style="endArrow=none;html=1;strokeColor=#333333;fontFamily=Helvetica;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="138" y="591.5" as="sourcePoint" />
+            <mxPoint x="320" y="690" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c29" value="" style="endArrow=none;html=1;strokeColor=#333333;fontFamily=Helvetica;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="138" y="821.5" as="sourcePoint" />
+            <mxPoint x="320" y="140" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c30" value="" style="endArrow=none;html=1;strokeColor=#333333;fontFamily=Helvetica;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="138" y="821.5" as="sourcePoint" />
+            <mxPoint x="320" y="800" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c31" value="" style="endArrow=none;html=1;strokeColor=#333333;fontFamily=Helvetica;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="570" y="320" as="sourcePoint" />
+            <mxPoint x="1150" y="320" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c32" value="«include»" style="endArrow=open;endSize=9;dashed=1;html=1;strokeColor=#b85450;fontSize=10;fontColor=#9a2a26;labelBackgroundColor=#ffffff;fontFamily=Helvetica;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="570" y="140" as="sourcePoint" />
+            <mxPoint x="820" y="140" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c33" value="«include»" style="endArrow=open;endSize=9;dashed=1;html=1;strokeColor=#b85450;fontSize=10;fontColor=#9a2a26;labelBackgroundColor=#ffffff;fontFamily=Helvetica;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="570" y="320" as="sourcePoint" />
+            <mxPoint x="820" y="375" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c34" value="«include»" style="endArrow=open;endSize=9;dashed=1;html=1;strokeColor=#b85450;fontSize=10;fontColor=#9a2a26;labelBackgroundColor=#ffffff;fontFamily=Helvetica;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="570" y="410" as="sourcePoint" />
+            <mxPoint x="820" y="375" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c35" value="«include»" style="endArrow=open;endSize=9;dashed=1;html=1;strokeColor=#b85450;fontSize=10;fontColor=#9a2a26;labelBackgroundColor=#ffffff;fontFamily=Helvetica;" parent="1" edge="1">
+          <mxGeometry x="0.3" relative="1" as="geometry">
+            <mxPoint x="570" y="320" as="sourcePoint" />
+            <mxPoint x="820" y="505" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c36" value="«include»" style="endArrow=open;endSize=9;dashed=1;html=1;strokeColor=#b85450;fontSize=10;fontColor=#9a2a26;labelBackgroundColor=#ffffff;fontFamily=Helvetica;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="570" y="510" as="sourcePoint" />
+            <mxPoint x="820" y="505" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c37" value="«include»" style="endArrow=open;endSize=9;dashed=1;html=1;strokeColor=#b85450;fontSize=10;fontColor=#9a2a26;labelBackgroundColor=#ffffff;fontFamily=Helvetica;" parent="1" edge="1">
+          <mxGeometry x="-0.45" relative="1" as="geometry">
+            <mxPoint x="570" y="600" as="sourcePoint" />
+            <mxPoint x="820" y="730" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c38" value="«include»" style="endArrow=open;endSize=9;dashed=1;html=1;strokeColor=#b85450;fontSize=10;fontColor=#9a2a26;labelBackgroundColor=#ffffff;fontFamily=Helvetica;" parent="1" edge="1">
+          <mxGeometry x="-0.45" relative="1" as="geometry">
+            <mxPoint x="570" y="690" as="sourcePoint" />
+            <mxPoint x="820" y="730" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c39" value="«include»" style="endArrow=open;endSize=9;dashed=1;html=1;strokeColor=#b85450;fontSize=10;fontColor=#9a2a26;labelBackgroundColor=#ffffff;fontFamily=Helvetica;" parent="1" edge="1">
+          <mxGeometry x="-0.45" relative="1" as="geometry">
+            <mxPoint x="570" y="800" as="sourcePoint" />
+            <mxPoint x="820" y="730" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c40" value="&lt;b&gt;«secrecy»&lt;/b&gt; Senhas guardadas só como hash BCrypt; HTTPS em produção; cookie de sessão HttpOnly e SameSite; nenhuma senha ou chave no Git (.env fora do repositório).&lt;br&gt;&lt;i&gt;Código: SegurancaConfig, application.properties&lt;/i&gt;" style="shape=note;size=12;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;align=left;verticalAlign=top;spacingLeft=8;spacingTop=4;fontSize=11;fontFamily=Helvetica;" parent="1" vertex="1">
+          <mxGeometry x="1240" y="92" width="400" height="92" as="geometry" />
+        </mxCell>
+        <mxCell id="c41" value="" style="endArrow=none;dashed=1;dashPattern=2 3;html=1;strokeColor=#999999;fontFamily=Helvetica;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1240" y="138" as="sourcePoint" />
+            <mxPoint x="1080" y="140" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c42" value="&lt;b&gt;«inputValidation»&lt;/b&gt; Cada campo tem formato, tamanho e faixa (@Pattern, @Positive, @Digits); só aceita valores conhecidos (COMPRA/VENDA, ativos cadastrados); SQL sempre com &lt;b&gt;?&lt;/b&gt; (nunca concatena); telas codificam a saída (Thymeleaf).&lt;br&gt;&lt;i&gt;Código: OrdemForm, repositórios&lt;/i&gt;" style="shape=note;size=12;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;align=left;verticalAlign=top;spacingLeft=8;spacingTop=4;fontSize=11;fontFamily=Helvetica;" parent="1" vertex="1">
+          <mxGeometry x="1240" y="322" width="400" height="106" as="geometry" />
+        </mxCell>
+        <mxCell id="c43" value="" style="endArrow=none;dashed=1;dashPattern=2 3;html=1;strokeColor=#999999;fontFamily=Helvetica;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1240" y="375" as="sourcePoint" />
+            <mxPoint x="1080" y="375" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c44" value="&lt;b&gt;«leastPrivilege»&lt;/b&gt; Cada perfil só abre as próprias páginas (/investidor, /admin, /risco), conferido no servidor em toda requisição; investidor só vê as próprias ordens.&lt;br&gt;&lt;i&gt;Código: SegurancaConfig, OrdemService&lt;/i&gt;" style="shape=note;size=12;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;align=left;verticalAlign=top;spacingLeft=8;spacingTop=4;fontSize=11;fontFamily=Helvetica;" parent="1" vertex="1">
+          <mxGeometry x="1240" y="684" width="400" height="92" as="geometry" />
+        </mxCell>
+        <mxCell id="c45" value="" style="endArrow=none;dashed=1;dashPattern=2 3;html=1;strokeColor=#999999;fontFamily=Helvetica;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1240" y="730" as="sourcePoint" />
+            <mxPoint x="1080" y="730" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c46" value="&lt;b&gt;«audit»&lt;/b&gt; Registra quem, quando, o quê e o resultado; nunca grava senhas ou códigos; o banco bloqueia alteração e exclusão dos registros.&lt;br&gt;&lt;i&gt;Código: AuditoriaService, gatilhos do schema.sql&lt;/i&gt;" style="shape=note;size=12;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;align=left;verticalAlign=top;spacingLeft=8;spacingTop=4;fontSize=11;fontFamily=Helvetica;" parent="1" vertex="1">
+          <mxGeometry x="1240" y="459" width="400" height="92" as="geometry" />
+        </mxCell>
+        <mxCell id="c47" value="" style="endArrow=none;dashed=1;dashPattern=2 3;html=1;strokeColor=#999999;fontFamily=Helvetica;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1240" y="505" as="sourcePoint" />
+            <mxPoint x="1080" y="505" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c48" value="&lt;b&gt;Estereótipos nos casos de uso do investidor e do administrador&lt;/b&gt;&lt;br&gt;• &lt;b&gt;«secureAuthentication»&lt;/b&gt;: senha + código de 6 dígitos (vale 5 min, 3 tentativas); 3 senhas erradas bloqueiam por 15 min; a mensagem de erro não diz qual dado errou. &lt;i&gt;AutenticacaoService, DesafioMfa&lt;/i&gt;&lt;br&gt;• &lt;b&gt;«integrity»&lt;/b&gt;: saldo, carteira, limites e mercado são conferidos no servidor; o identificador único impede ordem duplicada; estados finais travados. &lt;i&gt;ValidadorOrdem, OrdemService&lt;/i&gt;&lt;br&gt;• &lt;b&gt;«availability»&lt;/b&gt;: se a Bolsa cair, a ordem vira FALHA sem mexer na carteira e é reenviada depois com o mesmo id. &lt;i&gt;OrdemService.recuperarFalhas()&lt;/i&gt;&lt;br&gt;• &lt;b&gt;«DevSecOps»&lt;/b&gt;: a cada envio ao GitHub a esteira roda testes, Trivy (dependências e segredos) e Semgrep (código). &lt;i&gt;.github/workflows/devsecops.yml&lt;/i&gt;" style="rounded=1;arcSize=4;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#d6b656;align=left;verticalAlign=top;spacingLeft=10;spacingTop=6;fontSize=12;fontFamily=Helvetica;" parent="1" vertex="1">
+          <mxGeometry x="30" y="940" width="1610" height="112" as="geometry" />
+        </mxCell>
+        <mxCell id="c49" value="&lt;b&gt;Como ler:&lt;/b&gt; azul = o que o usuário faz · vermelho = proteção que o sistema aplica · «include» = sempre acontece junto · nota amarela = como a proteção foi feita e em qual arquivo." style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;fontSize=12;fontFamily=Helvetica;" parent="1" vertex="1">
+          <mxGeometry x="30" y="1060" width="1610" height="26" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

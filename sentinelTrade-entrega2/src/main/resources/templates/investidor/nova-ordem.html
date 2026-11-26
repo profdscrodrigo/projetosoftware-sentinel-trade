@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragmentos :: head('Nova ordem')}">
+    <link rel="stylesheet" href="../../static/css/estilo.css">
+</head>
+<body>
+<header th:replace="~{fragmentos :: topo}"></header>
+
+<main class="conteudo conteudo-estreito">
+    <div class="titulo-pagina">
+        <div>
+            <h1>Nova ordem</h1>
+            <p class="texto-suave">A ordem passa pelas regras de saldo, carteira e limites antes de ir para a Bolsa.</p>
+        </div>
+    </div>
+
+    <div th:replace="~{fragmentos :: mensagens}"></div>
+
+    <div class="grade-formulario">
+        <section class="cartao">
+            <form th:action="@{/investidor/ordens}" th:object="${ordemForm}" method="post" class="formulario">
+                <!-- Identificador único desta ordem: impede envio duplicado (RF-14) -->
+                <input type="hidden" name="chaveIdempotencia" th:value="*{chaveIdempotencia}">
+
+                <span class="rotulo">Tipo</span>
+                <div class="escolha-tipo">
+                    <label class="opcao">
+                        <input type="radio" name="tipo" value="COMPRA" th:checked="*{tipo?.name() == 'COMPRA'}">
+                        <span>Compra</span>
+                    </label>
+                    <label class="opcao">
+                        <input type="radio" name="tipo" value="VENDA" th:checked="*{tipo?.name() == 'VENDA'}">
+                        <span>Venda</span>
+                    </label>
+                </div>
+
+                <label for="ativo">Ativo</label>
+                <select id="ativo" name="ativo" required>
+                    <option value="">Escolha um ativo</option>
+                    <option th:each="a : ${ativos}" th:if="${a.negociavel}"
+                            th:value="${a.codigo}" th:selected="${a.codigo == ordemForm.ativo}"
+                            th:text="${a.codigo} + ' — cotação ' + ${@fmt.dinheiro(a.cotacao)}">ORCP3 — cotação R$ 25,40</option>
+                </select>
+
+                <div class="linha-campos">
+                    <div>
+                        <label for="quantidade">Quantidade</label>
+                        <input id="quantidade" name="quantidade" type="number" min="1" max="100000" step="1" required
+                               th:value="*{quantidade}" placeholder="10">
+                    </div>
+                    <div>
+                        <label for="preco">Preço por unidade (R$)</label>
+                        <input id="preco" name="preco" type="number" min="0.01" max="1000000" step="0.01" required
+                               th:value="*{preco}" placeholder="25.40">
+                    </div>
+                </div>
+
+                <label class="confirmacao" th:if="${pedirConfirmacao}">
+                    <input type="checkbox" name="confirmaAltoRisco" value="true">
+                    <span>Confirmo que quero enviar esta operação de alto risco.</span>
+                </label>
+
+                <button type="submit" class="botao botao-principal botao-largo">Enviar ordem</button>
+            </form>
+        </section>
+
+        <aside class="cartao cartao-lateral">
+            <h2>Antes de enviar</h2>
+            <dl class="resumo">
+                <dt>Saldo disponível</dt><dd th:text="${@fmt.dinheiro(saldo)}">R$ 10.000,00</dd>
+                <dt>Limite por ordem</dt><dd th:text="${@fmt.dinheiro(limite.porOrdem)}">R$ 5.000,00</dd>
+                <dt>Limite diário</dt><dd th:text="${@fmt.dinheiro(limite.diario)}">R$ 20.000,00</dd>
+                <dt>Pede confirmação acima de</dt><dd th:text="${@fmt.dinheiro(limite.altoRisco)}">R$ 3.000,00</dd>
+            </dl>
+            <p class="texto-suave">Na Bolsa simulada, a <strong>compra</strong> é executada se o seu preço for maior ou igual
+                à cotação; a <strong>venda</strong>, se for menor ou igual. Caso contrário a ordem fica
+                <em>aguardando</em>, e você pode alterar o preço ou cancelar.</p>
+        </aside>
+    </div>
+</main>
+
+<footer th:replace="~{fragmentos :: rodape}"></footer>
+</body>
+</html>

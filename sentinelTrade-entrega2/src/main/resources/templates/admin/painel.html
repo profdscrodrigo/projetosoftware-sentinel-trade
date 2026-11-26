@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragmentos :: head('Mercado')}">
+    <link rel="stylesheet" href="../../static/css/estilo.css">
+</head>
+<body>
+<header th:replace="~{fragmentos :: topo}"></header>
+
+<main class="conteudo">
+    <div class="titulo-pagina">
+        <div>
+            <h1>Mercado simulado</h1>
+            <p class="texto-suave">Altere cotações, simule problemas na Bolsa e recupere ordens com falha.</p>
+        </div>
+        <a class="botao botao-claro" th:href="@{/admin/auditoria}" href="auditoria.html">Ver auditoria</a>
+    </div>
+
+    <div th:replace="~{fragmentos :: mensagens}"></div>
+
+    <section class="indicadores indicadores-tres">
+        <!-- Mercado aberto/fechado -->
+        <div class="cartao indicador">
+            <span class="indicador-rotulo">Mercado</span>
+            <strong class="indicador-valor">
+                <span class="pilula pilula-verde" th:if="${mercadoAberto}">Aberto</span>
+                <span class="pilula pilula-vermelha" th:unless="${mercadoAberto}">Fechado</span>
+            </strong>
+            <form th:action="@{/admin/parametros}" method="post">
+                <input type="hidden" name="chave" value="MERCADO_ABERTO">
+                <input type="hidden" name="valor" th:value="${mercadoAberto} ? 'false' : 'true'" value="false">
+                <button type="submit" class="botao botao-pequeno botao-claro"
+                        th:text="${mercadoAberto} ? 'Fechar mercado' : 'Abrir mercado'">Fechar mercado</button>
+            </form>
+        </div>
+
+        <!-- Bolsa disponível ou fora do ar -->
+        <div class="cartao indicador">
+            <span class="indicador-rotulo">Bolsa simulada</span>
+            <strong class="indicador-valor">
+                <span class="pilula pilula-verde" th:if="${bolsaDisponivel}">Disponível</span>
+                <span class="pilula pilula-vermelha" th:unless="${bolsaDisponivel}">Fora do ar</span>
+            </strong>
+            <form th:action="@{/admin/parametros}" method="post">
+                <input type="hidden" name="chave" value="BOLSA_DISPONIVEL">
+                <input type="hidden" name="valor" th:value="${bolsaDisponivel} ? 'false' : 'true'" value="false">
+                <button type="submit" class="botao botao-pequeno botao-claro"
+                        th:text="${bolsaDisponivel} ? 'Simular queda' : 'Restabelecer'">Simular queda</button>
+            </form>
+        </div>
+
+        <!-- Recuperação de ordens (RF-13) -->
+        <div class="cartao indicador">
+            <span class="indicador-rotulo">Ordens com falha</span>
+            <strong class="indicador-valor" th:text="${#lists.size(ordensComFalha)}">0</strong>
+            <form th:action="@{/admin/recuperar}" method="post">
+                <button type="submit" class="botao botao-pequeno"
+                        th:disabled="${#lists.isEmpty(ordensComFalha)}">Recuperar ordens</button>
+            </form>
+        </div>
+    </section>
+
+    <section class="cartao">
+        <h2>Ativos e cotações</h2>
+        <p class="texto-suave">Ao mudar a cotação, as ordens que aguardavam esse preço são executadas automaticamente.</p>
+        <div class="tabela-rolagem">
+            <table class="tabela">
+                <thead>
+                <tr><th>Ativo</th><th>Tipo</th><th>Situação</th><th class="num">Cotação</th><th class="num">Variação</th><th>Nova cotação</th></tr>
+                </thead>
+                <tbody>
+                <tr th:each="a : ${ativos}">
+                    <td><strong th:text="${a.codigo}">ORCP3</strong>
+                        <div class="texto-suave" th:text="${a.nome}">Orion Participações (fictício)</div></td>
+                    <td th:text="${a.tipo}">ACAO</td>
+                    <td>
+                        <span class="pilula pilula-verde" th:if="${a.negociavel}">Negociável</span>
+                        <span class="pilula pilula-cinza" th:unless="${a.negociavel}">Suspenso</span>
+                    </td>
+                    <td class="num" th:text="${@fmt.dinheiro(a.cotacao)}">R$ 25,40</td>
+                    <td class="num"><span th:classappend="${a.emAlta} ? 'positivo' : 'negativo'"
+                                          th:text="${@fmt.percentual(a.variacao)}">+1,20%</span></td>
+                    <td>
+                        <form th:action="@{/admin/ativos/{id}/cotacao(id=${a.id})}" method="post" class="form-inline">
+                            <input name="preco" type="number" min="0.01" max="1000000" step="0.01" required
+                                   th:value="${a.cotacao}" aria-label="Nova cotação">
+                            <button type="submit" class="botao botao-pequeno">Atualizar</button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="cartao" th:unless="${#lists.isEmpty(ordensComFalha)}">
+        <h2>Ordens aguardando recuperação</h2>
+        <div class="tabela-rolagem">
+            <table class="tabela">
+                <thead><tr><th>Data</th><th>Ativo</th><th>Tipo</th><th class="num">Qtd.</th><th class="num">Total</th><th>Motivo</th></tr></thead>
+                <tbody>
+                <tr th:each="o : ${ordensComFalha}">
+                    <td th:text="${o.criadoEm}">05/11/2026 10:20</td>
+                    <td th:text="${o.codigoAtivo}">ORCP3</td>
+                    <td th:text="${o.tipo}">COMPRA</td>
+                    <td class="num" th:text="${o.quantidade}">10</td>
+                    <td class="num" th:text="${@fmt.dinheiro(o.valorTotal)}">R$ 254,00</td>
+                    <td th:text="${o.motivo}">Bolsa simulada indisponível.</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</main>
+
+<footer th:replace="~{fragmentos :: rodape}"></footer>
+</body>
+</html>

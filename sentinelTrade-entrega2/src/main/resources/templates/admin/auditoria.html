@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragmentos :: head('Auditoria')}">
+    <link rel="stylesheet" href="../../static/css/estilo.css">
+</head>
+<body>
+<header th:replace="~{fragmentos :: topo}"></header>
+
+<main class="conteudo">
+    <div class="titulo-pagina">
+        <div>
+            <h1>Auditoria</h1>
+            <p class="texto-suave">Últimos 100 eventos: quem, quando, o quê e em qual registro.
+                Os registros não podem ser alterados nem apagados (RNF-07).</p>
+        </div>
+    </div>
+
+    <section class="cartao">
+        <div class="tabela-rolagem">
+            <table class="tabela tabela-compacta">
+                <thead>
+                <tr><th>Data e hora</th><th>Quem</th><th>Ação</th><th>Registro</th><th>Detalhes</th></tr>
+                </thead>
+                <tbody>
+                <tr th:each="r : ${registros}">
+                    <td th:text="${r.dataHora}">05/11/2026 10:20:01</td>
+                    <td th:text="${r.usuario}">Investidor Exemplo A</td>
+                    <td><code th:text="${r.acao}">ORDEM_EXECUTADA</code></td>
+                    <td><span th:text="${r.entidade}">ordem</span>
+                        <span class="texto-suave" th:if="${r.entidadeId != null}" th:text="'#' + ${r.entidadeId}">#1</span></td>
+                    <td th:text="${r.detalhes}">ENVIADA -&gt; EXECUTADA</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</main>
+
+<footer th:replace="~{fragmentos :: rodape}"></footer>
+</body>
+</html>

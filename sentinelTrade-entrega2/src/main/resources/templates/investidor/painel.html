@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragmentos :: head('Painel')}">
+    <link rel="stylesheet" href="../../static/css/estilo.css">
+</head>
+<body>
+<header th:replace="~{fragmentos :: topo}"></header>
+
+<main class="conteudo">
+    <div class="titulo-pagina">
+        <div>
+            <h1>Olá, <span th:text="${usuarioLogado.nome}">Investidor Exemplo A</span></h1>
+            <p class="texto-suave">Resumo da sua conta no mercado simulado.</p>
+        </div>
+        <a class="botao botao-principal" th:href="@{/investidor/ordens/nova}" href="nova-ordem.html">+ Nova ordem</a>
+    </div>
+
+    <div th:replace="~{fragmentos :: mensagens}"></div>
+
+    <!-- Indicadores -->
+    <section class="indicadores">
+        <div class="cartao indicador">
+            <span class="indicador-rotulo">Saldo disponível</span>
+            <strong class="indicador-valor" th:text="${@fmt.dinheiro(saldo)}">R$ 10.000,00</strong>
+        </div>
+        <div class="cartao indicador">
+            <span class="indicador-rotulo">Limite por ordem</span>
+            <strong class="indicador-valor" th:text="${@fmt.dinheiro(limite.porOrdem)}">R$ 5.000,00</strong>
+        </div>
+        <div class="cartao indicador">
+            <span class="indicador-rotulo">Limite diário</span>
+            <strong class="indicador-valor" th:text="${@fmt.dinheiro(limite.diario)}">R$ 20.000,00</strong>
+        </div>
+        <div class="cartao indicador">
+            <span class="indicador-rotulo">Mercado</span>
+            <strong class="indicador-valor">
+                <span class="pilula pilula-verde" th:if="${mercadoAberto}">Aberto</span>
+                <span class="pilula pilula-vermelha" th:unless="${mercadoAberto}">Fechado</span>
+            </strong>
+        </div>
+    </section>
+
+    <div class="grade-duas">
+        <!-- Carteira (RF-15) -->
+        <section class="cartao">
+            <h2>Minha carteira</h2>
+            <p class="texto-suave" th:if="${#lists.isEmpty(posicoes)}">Você ainda não tem ativos.</p>
+            <div class="tabela-rolagem" th:unless="${#lists.isEmpty(posicoes)}">
+                <table class="tabela">
+                    <thead>
+                    <tr><th>Ativo</th><th class="num">Qtd.</th><th class="num">Preço médio</th><th class="num">Valor estimado</th></tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="p : ${posicoes}">
+                        <td><strong th:text="${p.codigoAtivo}">ORCP3</strong>
+                            <div class="texto-suave" th:text="${p.nomeAtivo}">Orion Participações</div></td>
+                        <td class="num" th:text="${p.quantidade}">100</td>
+                        <td class="num" th:text="${@fmt.dinheiro(p.precoMedio)}">R$ 22,00</td>
+                        <td class="num" th:text="${@fmt.dinheiro(p.valorEstimado)}">R$ 2.540,00</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Notificações (RF-12) -->
+        <section class="cartao">
+            <h2>Notificações</h2>
+            <p class="texto-suave" th:if="${#lists.isEmpty(notificacoes)}">Nenhuma notificação.</p>
+            <ul class="lista-avisos">
+                <li th:each="n : ${notificacoes}">
+                    <span th:text="${n.mensagem}">Sua ordem de COMPRA de 10 ORCP3 foi executada.</span>
+                    <small th:text="${n.dataHora}">05/11/2026 10:20</small>
+                </li>
+            </ul>
+        </section>
+    </div>
+
+    <!-- Cotações (RF-06) -->
+    <section class="cartao">
+        <h2>Cotações</h2>
+        <div class="tabela-rolagem">
+            <table class="tabela">
+                <thead>
+                <tr><th>Ativo</th><th>Tipo</th><th class="num">Cotação</th><th class="num">Variação</th><th></th></tr>
+                </thead>
+                <tbody>
+                <tr th:each="a : ${ativos}">
+                    <td><strong th:text="${a.codigo}">ORCP3</strong>
+                        <div class="texto-suave" th:text="${a.nome}">Orion Participações (fictício)</div></td>
+                    <td th:text="${a.tipo}">ACAO</td>
+                    <td class="num" th:text="${@fmt.dinheiro(a.cotacao)}">R$ 25,40</td>
+                    <td class="num">
+                        <span th:classappend="${a.emAlta} ? 'positivo' : 'negativo'"
+                              th:text="${@fmt.percentual(a.variacao)}">+1,20%</span>
+                    </td>
+                    <td class="acoes">
+                        <th:block th:if="${a.negociavel}">
+                            <a class="botao botao-pequeno" th:href="@{/investidor/ordens/nova(ativo=${a.codigo},tipo='COMPRA')}" href="#">Comprar</a>
+                            <a class="botao botao-pequeno botao-claro" th:href="@{/investidor/ordens/nova(ativo=${a.codigo},tipo='VENDA')}" href="#">Vender</a>
+                        </th:block>
+                        <span class="pilula pilula-cinza" th:unless="${a.negociavel}">Suspenso</span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</main>
+
+<footer th:replace="~{fragmentos :: rodape}"></footer>
+</body>
+</html>

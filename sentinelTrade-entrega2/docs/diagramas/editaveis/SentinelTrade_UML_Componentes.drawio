@@ -1,0 +1,130 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/24.7.17 Chrome/128.0.6613.36 Electron/32.0.1 Safari/537.36" version="24.7.17">
+  <diagram id="d1" name="UML Componentes - SentinelTrade">
+    <mxGraphModel dx="-704" dy="-262" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="0" page="0" pageScale="1" pageWidth="1220" pageHeight="990" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="c3" value="&lt;b style=&#39;font-size:20px&#39;&gt;SentinelTrade — Diagrama de Componentes&lt;/b&gt;&lt;br&gt;&lt;span style=&#39;font-size:13px;color:#555&#39;&gt;Quais módulos e serviços compõem o sistema · cada componente é uma pasta do código em &lt;i&gt;src/main/java/br/mackenzie/sentineltrade/&lt;/i&gt;&lt;/span&gt;" style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;fontFamily=Helvetica;" parent="1" vertex="1">
+          <mxGeometry x="30" y="10" width="1300" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="c4" value="&lt;i&gt;«subsystem»&lt;/i&gt; &lt;b&gt;SentinelTrade&lt;/b&gt; &lt;span style=&#39;color:#555&#39;&gt;(aplicação Java 17 + Spring Boot · sentineltrade.jar)&lt;/span&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fcfcfc;strokeColor=#333333;strokeWidth=2;verticalAlign=top;align=left;spacingLeft=12;spacingTop=6;fontSize=14;fontFamily=Helvetica;" parent="1" vertex="1">
+          <mxGeometry x="280" y="80" width="900" height="700" as="geometry" />
+        </mxCell>
+        <mxCell id="c5" value="&lt;font style=&#39;font-size:10px&#39;&gt;«component»&lt;/font&gt;&lt;br&gt;&lt;b&gt;Telas do site&lt;/b&gt;&lt;br&gt;&lt;font style=&#39;font-size:10px;color:#555&#39;&gt;resources/templates + static/css&lt;/font&gt;&lt;br&gt;&lt;font style=&#39;font-size:11px&#39;&gt;login, MFA, painel, ordens, mercado, risco (HTML + CSS)&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=13;fontFamily=Helvetica;" parent="1" vertex="1">
+          <mxGeometry x="380" y="120" width="380" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="c6" value="" style="shape=module;jettyWidth=8;jettyHeight=4;html=1;fillColor=#ffffff;strokeColor=#666666;" parent="c5" vertex="1">
+          <mxGeometry x="354" y="8" width="16" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="c7" value="&lt;font style=&#39;font-size:10px&#39;&gt;«component»&lt;/font&gt;&lt;br&gt;&lt;b&gt;Controllers&lt;/b&gt;&lt;br&gt;&lt;font style=&#39;font-size:10px;color:#555&#39;&gt;controller/&lt;/font&gt;&lt;br&gt;&lt;font style=&#39;font-size:11px&#39;&gt;LoginController · InvestidorController&lt;br&gt;AdminController · RiscoController&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=13;fontFamily=Helvetica;" parent="1" vertex="1">
+          <mxGeometry x="380" y="260" width="380" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="c8" value="" style="shape=module;jettyWidth=8;jettyHeight=4;html=1;fillColor=#ffffff;strokeColor=#666666;" parent="c7" vertex="1">
+          <mxGeometry x="354" y="8" width="16" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="c9" value="&lt;font style=&#39;font-size:10px&#39;&gt;«component»&lt;/font&gt;&lt;br&gt;&lt;b&gt;Serviços de negócio&lt;/b&gt;&lt;br&gt;&lt;font style=&#39;font-size:10px;color:#555&#39;&gt;service/&lt;/font&gt;&lt;br&gt;&lt;font style=&#39;font-size:11px&#39;&gt;OrdemService · ContaService · MercadoService&lt;br&gt;ValidadorOrdem + 6 regras (RF-08)&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=13;fontFamily=Helvetica;" parent="1" vertex="1">
+          <mxGeometry x="380" y="400" width="380" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="c10" value="" style="shape=module;jettyWidth=8;jettyHeight=4;html=1;fillColor=#ffffff;strokeColor=#6c8ebf;" parent="c9" vertex="1">
+          <mxGeometry x="354" y="8" width="16" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="c11" value="&lt;font style=&#39;font-size:10px&#39;&gt;«component»&lt;/font&gt;&lt;br&gt;&lt;b&gt;Repositórios&lt;/b&gt;&lt;br&gt;&lt;font style=&#39;font-size:10px;color:#555&#39;&gt;repository/&lt;/font&gt;&lt;br&gt;&lt;font style=&#39;font-size:11px&#39;&gt;consultas SQL com &lt;b&gt;?&lt;/b&gt; (JdbcTemplate)&lt;br&gt;cria o banco na 1ª execução&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=13;fontFamily=Helvetica;" parent="1" vertex="1">
+          <mxGeometry x="380" y="560" width="380" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="c12" value="" style="shape=module;jettyWidth=8;jettyHeight=4;html=1;fillColor=#ffffff;strokeColor=#82b366;" parent="c11" vertex="1">
+          <mxGeometry x="354" y="8" width="16" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="c13" value="&lt;font style=&#39;font-size:10px&#39;&gt;«component»&lt;/font&gt;&lt;br&gt;&lt;b&gt;Segurança&lt;/b&gt;&lt;br&gt;&lt;font style=&#39;font-size:10px;color:#555&#39;&gt;seguranca/&lt;/font&gt;&lt;br&gt;&lt;font style=&#39;font-size:11px&#39;&gt;login com senha BCrypt + MFA&lt;br&gt;perfis, CSRF, sessão segura&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=13;fontFamily=Helvetica;" parent="1" vertex="1">
+          <mxGeometry x="830" y="250" width="320" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="c14" value="" style="shape=module;jettyWidth=8;jettyHeight=4;html=1;fillColor=#ffffff;strokeColor=#b85450;" parent="c13" vertex="1">
+          <mxGeometry x="294" y="8" width="16" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="c15" value="&lt;font style=&#39;font-size:10px&#39;&gt;«component»&lt;/font&gt;&lt;br&gt;&lt;b&gt;Auditoria&lt;/b&gt;&lt;br&gt;&lt;font style=&#39;font-size:10px;color:#555&#39;&gt;auditoria/&lt;/font&gt;&lt;br&gt;&lt;font style=&#39;font-size:11px&#39;&gt;registra quem, quando e o quê (RF-11)&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=13;fontFamily=Helvetica;" parent="1" vertex="1">
+          <mxGeometry x="830" y="380" width="320" height="74" as="geometry" />
+        </mxCell>
+        <mxCell id="c16" value="" style="shape=module;jettyWidth=8;jettyHeight=4;html=1;fillColor=#ffffff;strokeColor=#d79b00;" parent="c15" vertex="1">
+          <mxGeometry x="294" y="8" width="16" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="c17" value="&lt;font style=&#39;font-size:10px&#39;&gt;«component»&lt;/font&gt;&lt;br&gt;&lt;b&gt;Notificação&lt;/b&gt;&lt;br&gt;&lt;font style=&#39;font-size:10px;color:#555&#39;&gt;notificacao/&lt;/font&gt;&lt;br&gt;&lt;font style=&#39;font-size:11px&#39;&gt;avisos ao investidor (RF-12)&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=13;fontFamily=Helvetica;" parent="1" vertex="1">
+          <mxGeometry x="830" y="474" width="320" height="74" as="geometry" />
+        </mxCell>
+        <mxCell id="c18" value="" style="shape=module;jettyWidth=8;jettyHeight=4;html=1;fillColor=#ffffff;strokeColor=#d79b00;" parent="c17" vertex="1">
+          <mxGeometry x="294" y="8" width="16" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="c19" value="&lt;font style=&#39;font-size:10px&#39;&gt;«component»&lt;/font&gt;&lt;br&gt;&lt;b&gt;Integração com a Bolsa&lt;/b&gt;&lt;br&gt;&lt;font style=&#39;font-size:10px;color:#555&#39;&gt;integracao/&lt;/font&gt;&lt;br&gt;&lt;font style=&#39;font-size:11px&#39;&gt;interface BolsaGateway&lt;br&gt;→ BolsaSimulada (RF-09)&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=13;fontFamily=Helvetica;" parent="1" vertex="1">
+          <mxGeometry x="830" y="570" width="320" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="c20" value="" style="shape=module;jettyWidth=8;jettyHeight=4;html=1;fillColor=#ffffff;strokeColor=#9673a6;" parent="c19" vertex="1">
+          <mxGeometry x="294" y="8" width="16" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="c21" value="&lt;font style=&#39;font-size:10px&#39;&gt;«externo»&lt;/font&gt;&lt;br&gt;&lt;b&gt;Navegador&lt;/b&gt;&lt;br&gt;&lt;font style=&#39;font-size:11px&#39;&gt;do investidor, administrador&lt;br&gt;ou analista de risco&lt;/font&gt;" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;fontSize=13;fontFamily=Helvetica;" parent="1" vertex="1">
+          <mxGeometry x="40" y="125" width="190" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="c22" value="&lt;b&gt;Banco SQLite&lt;/b&gt;&lt;br&gt;&lt;font style=&#39;font-size:11px&#39;&gt;database/sentineltrade.db&lt;/font&gt;" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=12;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=13;fontFamily=Helvetica;" parent="1" vertex="1">
+          <mxGeometry x="495" y="820" width="150" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="c23" value="HTTPS" style="endArrow=open;endSize=10;dashed=1;html=1;strokeColor=#444444;fontSize=11;labelBackgroundColor=#ffffff;rounded=0;fontFamily=Helvetica;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="230" y="170" as="sourcePoint" />
+            <mxPoint x="380" y="170" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c24" value="envia formulários" style="endArrow=open;endSize=10;dashed=1;html=1;strokeColor=#444444;fontSize=11;labelBackgroundColor=#ffffff;rounded=0;fontFamily=Helvetica;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="570" y="220" as="sourcePoint" />
+            <mxPoint x="570" y="260" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c25" value="usa" style="endArrow=open;endSize=10;dashed=1;html=1;strokeColor=#444444;fontSize=11;labelBackgroundColor=#ffffff;rounded=0;fontFamily=Helvetica;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="570" y="360" as="sourcePoint" />
+            <mxPoint x="570" y="400" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c26" value="usa" style="endArrow=open;endSize=10;dashed=1;html=1;strokeColor=#444444;fontSize=11;labelBackgroundColor=#ffffff;rounded=0;fontFamily=Helvetica;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="570" y="510" as="sourcePoint" />
+            <mxPoint x="570" y="560" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c27" value="SQL (JDBC)" style="endArrow=open;endSize=10;dashed=1;html=1;strokeColor=#444444;fontSize=11;labelBackgroundColor=#ffffff;rounded=0;fontFamily=Helvetica;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="570" y="660" as="sourcePoint" />
+            <mxPoint x="570" y="820" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c28" value="protege" style="endArrow=open;endSize=10;dashed=1;html=1;strokeColor=#444444;fontSize=11;labelBackgroundColor=#ffffff;rounded=0;fontFamily=Helvetica;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="830" y="300" as="sourcePoint" />
+            <mxPoint x="760" y="310" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c29" value="usa" style="endArrow=open;endSize=10;dashed=1;html=1;strokeColor=#444444;fontSize=11;labelBackgroundColor=#ffffff;rounded=0;fontFamily=Helvetica;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="760" y="433" as="sourcePoint" />
+            <mxPoint x="830" y="417" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c30" value="usa" style="endArrow=open;endSize=10;dashed=1;html=1;strokeColor=#444444;fontSize=11;labelBackgroundColor=#ffffff;rounded=0;fontFamily=Helvetica;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="760" y="482.5" as="sourcePoint" />
+            <mxPoint x="830" y="511" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c31" value="" style="endArrow=open;endSize=10;dashed=1;html=1;strokeColor=#444444;fontSize=11;labelBackgroundColor=#ffffff;rounded=0;fontFamily=Helvetica;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="703" y="510" as="sourcePoint" />
+            <mxPoint x="830" y="615" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="703" y="615" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c32" value="&lt;b&gt;Como ler:&lt;/b&gt; cada caixa com o ícone ⧉ é um componente (uma parte do sistema). A seta tracejada mostra quem &lt;b&gt;usa&lt;/b&gt; quem. O caminho principal vai de cima para baixo: telas → controllers → regras → repositórios → banco." style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;fontSize=12;fontFamily=Helvetica;" parent="1" vertex="1">
+          <mxGeometry x="30" y="930" width="1150" height="40" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
