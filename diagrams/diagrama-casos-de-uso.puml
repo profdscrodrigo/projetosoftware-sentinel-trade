@@ -1,0 +1,131 @@
+@startuml SentinelTrade_CasosDeUso
+title SentinelTrade - Diagrama de Casos de Uso com UMLsec
+' Mesmo conteúdo de docs/uml/diagrama-casos-de-uso.png
+' Visualizar: https://www.plantuml.com/plantuml  ou extensão PlantUML do VS Code
+left to right direction
+skinparam packageStyle rectangle
+
+actor "Investidor" as INV
+actor "Administrador" as ADM
+actor "Analista de Risco" as AR
+actor "Provedor de Cotações" as PROV
+actor "Bolsa/Corretora Simulada" as BOLSA
+actor "Serviço de Auditoria" as AUD
+actor "Serviço de Notificação" as NOT
+
+rectangle "Sistema SentinelTrade" <<secure>> {
+  usecase "UC-01 Autenticar Usuário (MFA)" as UC01 <<secureAuthentication>>
+  usecase "UC-02 Consultar Cotações" as UC02 <<availability>>
+  usecase "UC-03 Consultar Saldo" as UC03 <<secrecy>>
+  usecase "UC-04 Consultar Carteira" as UC04 <<secrecy>>
+  usecase "UC-05 Enviar Ordem de Compra" as UC05 <<integrity>>
+  usecase "UC-06 Cancelar Ordem" as UC06 <<integrity>>
+  usecase "UC-07 Consultar Ordem" as UC07 <<secrecy>>
+  usecase "UC-08 Acompanhar Ordem" as UC08 <<secrecy>>
+  usecase "UC-09 Consultar Histórico" as UC09 <<secrecy>>
+  usecase "UC-10 Enviar Ordem de Venda" as UC10 <<integrity>>
+  usecase "UC-11 Validar Ordem" as UC11 <<inputValidation>>
+  usecase "UC-12 Transmitir Ordem à Bolsa/Corretora" as UC12 <<availability>>
+  usecase "UC-13 Gerenciar Ativos" as UC13 <<leastPrivilege>>
+  usecase "UC-14 Gerenciar Limites de Risco" as UC14 <<leastPrivilege>>
+  usecase "UC-15 Registrar Auditoria" as UC15 <<audit>>
+  usecase "UC-16 Enviar Notificação" as UC16
+  usecase "UC-17 Receber Cotações do Provedor" as UC17 <<availability>>
+  usecase "UC-18 Alterar Ordem" as UC18 <<inputValidation>>
+  usecase "UC-19 Gerenciar Contas de Investidores" as UC19 <<leastPrivilege>>
+  usecase "UC-20 Acompanhar Ordens Bloqueadas/Rejeitadas" as UC20 <<leastPrivilege>>
+  usecase "Verificar Saldo ou Posição" as V1
+  usecase "Verificar Limite de Risco" as V2
+  usecase "Verificar Situação do Mercado" as V3
+  usecase "Verificar Duplicidade" as V4
+  usecase "Confirmar Operação Acima do Limite" as EXT1
+}
+
+' ---- associações (linha simples, sem seta) ----
+INV -- UC01
+INV -- UC02
+INV -- UC03
+INV -- UC04
+INV -- UC05
+INV -- UC10
+INV -- UC18
+INV -- UC06
+INV -- UC07
+INV -- UC08
+INV -- UC09
+ADM -- UC01
+ADM -- UC19
+ADM -- UC13
+AR -- UC01
+AR -- UC14
+AR -- UC20
+UC17 -- PROV
+UC12 -- BOLSA
+UC15 -- AUD
+UC16 -- NOT
+
+' ---- <<include>>: obrigatório (base ..> incluído) ----
+UC02 ..> UC17 : <<include>>
+UC05 ..> UC11 : <<include>>
+UC10 ..> UC11 : <<include>>
+UC18 ..> UC11 : <<include>>
+UC11 ..> V1 : <<include>>
+UC11 ..> V2 : <<include>>
+UC11 ..> V3 : <<include>>
+UC11 ..> V4 : <<include>>
+UC05 ..> UC12 : <<include>>
+UC10 ..> UC12 : <<include>>
+UC08 ..> UC07 : <<include>>
+UC11 ..> UC15 : <<include>>
+UC12 ..> UC15 : <<include>>
+UC06 ..> UC15 : <<include>>
+UC01 ..> UC15 : <<include>>
+UC13 ..> UC15 : <<include>>
+UC14 ..> UC15 : <<include>>
+UC19 ..> UC15 : <<include>>
+UC12 ..> UC16 : <<include>>
+UC06 ..> UC16 : <<include>>
+
+' ---- <<extend>>: condicional (extensão ..> base) ----
+EXT1 ..> UC05 : <<extend>>
+EXT1 ..> UC10 : <<extend>>
+
+note right of EXT1
+  Condição: valor da ordem > limite_confirmacao
+  (R$ 10.000, parâmetro do Administrador)
+end note
+
+' ---- notas UMLsec: como o SentinelTrade atende cada estereótipo ----
+note bottom of UC01
+  <<secureAuthentication>> bcrypt; MFA de 6 dígitos (5 min, uso único);
+  token assinado (HMAC) e sessão de 30 min; bloqueio após 5 senhas
+  erradas; mensagem genérica que não revela o que falhou.
+end note
+note right of UC04
+  <<secrecy>> senhas só como hash; segredos só no .env (fora do Git);
+  nada de senha, token ou código em logs ou mensagens de erro.
+  Produção: HTTPS (TLS 1.2+); no simulado a API roda só em 127.0.0.1.
+end note
+note bottom of UC13
+  <<leastPrivilege>> perfil conferido no servidor a cada requisição;
+  permissões nunca vêm do cliente; perfis separados;
+  o investidor só vê os próprios dados.
+end note
+note right of UC15
+  <<audit>> quem, quando, ação e resultado; sem senhas, tokens
+  ou códigos; trigger no banco impede alterar ou apagar.
+end note
+note right of UC11
+  <<inputValidation>> Pydantic (tipo, tamanho, formato, faixa);
+  allowlists; SQL só com parâmetros (SQLAlchemy).
+end note
+note right of UC05
+  <<integrity>> confere ativo, quantidade, preço, saldo/posição,
+  limite e chave de idempotência antes de executar; transação.
+end note
+note right of UC12
+  <<availability>> 3 tentativas na bolsa; ordem em FALHA não se perde;
+  cotações com validação da resposta, cache e circuit breaker.
+end note
+note "<<DevSecOps>> bandit (SAST) e pip-audit (SCA) sem problemas;\n51 testes automáticos; perguntas reflexivas no README." as DEVSECOPS
+@enduml
